@@ -8,6 +8,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\RichPayController;
 use App\Http\Controllers\IpintPaymentController;
 use App\Http\Controllers\XprizoPaymentController;
+use App\Http\Controllers\QorePaymentController;
 
 use App\Livewire\Auth\LoginPage;
 use App\Livewire\DashboardPage;
@@ -122,6 +123,13 @@ Route::get('/xpz/payintest', function () {
 });
 Route::get('/xpz/payouttest', function () {
     return view('payment-form.xpz.payouttest');
+});
+
+
+Route::controller(QorePaymentController::class)->group(function () {
+    Route::get('/QCardDeposit', 'qoreDepositform');            // Card Deposit form 
+    Route::get('qp/deposit/gatewayResponse', 'qpDepositGatewayResponse');       // for gateway response
+   
 });
 
 
