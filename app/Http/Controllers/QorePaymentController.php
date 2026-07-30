@@ -98,26 +98,27 @@ class QorePaymentController extends Controller
             'Accept' => 'application/json',
             'User-Agent' => 'PostmanTestClient/1.0',
             'Authorization' => 'Bearer '.$accessToken, // truncated for safety
-        ])->post('https://api.qorepayments.com/api/transactions/authorize', [
-            "terminal_id" => "t-orionedge",
-            "reference" => "TR202607301732145111",
-            "description" => "Card purchase in USD",
-            "currency" => "USD",
-            "amount" => 1,
+        ])->post(rtrim($res['parameters']['api_url'], '/') . '/api/transactions/authorize', [
+            'terminal_id'      => $res['parameters']['terminal_id'],
+            'reference'        => $frtransaction,
+            'description'      => 'Card purchase in ' . $request->Currency,
+            'currency'         => $request->Currency,
+            "amount" => $cleanAmount,
             "transaction_type" => "PURCHASE",
             "payment_method" => [
                 "type" => "card",
-                "data" => [
-                    "encrypted_card_number" => "TZSFOYulf+itpLHp9RCVtIrJ/BBQr7sMvzEN9+NjoklArkLCy4O4pUzfWP0hD6QpuRDDjPmqQGnrlFo2H895kaDAeI4l6h36vxJ5+6pooMFC9TBtcI+20FORm0KlNaYT14wnxVwNKY6pXvh2b6h/awbX7QHvTOXUvJPYvkGlh6U7g/XzN9lrdvEmjozisNWORFOQzZVnJv+YTg8U+m2Z25lFJrut7ubADDA2TQTKVeRu5msl839gXFfQXgWiFK6n7Kv0f63fcJCXQsInPvpEZwM0c+8vYjeunOIkeTm4psjeLUrCl2IUySbUV/rKibpWgp+jPAKgPWFdWZV6MKrfuw==",
-                    "encrypted_cvv" => "fvAbNuKYBhICTxcZu9MQ6E6pWxcWicfKbTnQSvqcTSsO28ywLf6MwMyLNXKn3h+1+6dr0yBPT/gfKBafKvCkkSKAQvzfiPPOg5cgEqaHhnCH2QQQ1eIYSrj42aJnOj03JSYYlYifAnXBX4bFVnBj1XNfj65Ay5V+WdlfhJmYWKHs7F/vzTvKpU0dVDMKytEZBzDM3Sy7dTz9DW8lZVu5KPUSIkSehwuqGqe7mEEXDzaf1xZfHG8lH2lAB2zdQO+NmuZsG2T6pIGcWAYItWGuotSrSI0gsiD9ncSgoYUyYDUDX07jPYcBWsiGa+10CifzJzq6aNGJa6ksIdVjN0KtZw==",
-                    "encrypted_expiration_month" => "oZPkf4ueX8lxzkF/k9+2BkOgKhoMsSq8SV+VYwM5wBokOKAv5or0d7EW//8SbRDPgFbjBY7YUderc/tmYbiio1LYMxkaJq2ZXDdbqmEtcZoI/bbBIPJJAF/K4SH241Q+LCMpejugKjNvfgJ8OI8+Il85WEwXcZ/EdocGEqMgWbisV0L4+o/35xv+gf+tVfDYvKhJhhDFIy/wW7UrnTuH4NE0+DXHdoYuxEYqBiC7NcBpv5Zd8fc2q0ub0Og0N4NliLln0/ETxvmY9C/K3h2BwdTW9SYd3nwMAi63fb4RNI62KBeubR6unILXnRHCC+N1BkSEcFWXystIXZLtFSatgw==",
-                    "encrypted_expiration_year" => "aXWZItwHBIsJA16Qgyu7bT0CDyO3lTD/Wd0ZSJA9d2unNBc28NGQjn8SBy3vVR1TB7mZOvjuqvfmq21fO2NcpE/thMubZH+suu/wpXkarmTsIzWODs66nrIgUsejBafFHnyIY9a9/hyVGlT9B+9WvQUcizIoRMafxLV1CCzrG3tlEudI6aqqsfKPdv0N9neYNtFWImlfWduxzGb0wGXs6BaJmY7Yhd3X+5cYwqGyZwWLSGiPpeMgaZXNS1m8fnTtW2Dd0D4PtHOFpfmLYyuVwS2N8OahCGDmm7Z3GmyH1Wm5XurYLxc4Qd6QcZq7ORt5MzBoV8LhIYrPSa6hFvwy+A==",
-                ],
+                // "data" => [
+                //     "encrypted_card_number" => "TZSFOYulf+itpLHp9RCVtIrJ/BBQr7sMvzEN9+NjoklArkLCy4O4pUzfWP0hD6QpuRDDjPmqQGnrlFo2H895kaDAeI4l6h36vxJ5+6pooMFC9TBtcI+20FORm0KlNaYT14wnxVwNKY6pXvh2b6h/awbX7QHvTOXUvJPYvkGlh6U7g/XzN9lrdvEmjozisNWORFOQzZVnJv+YTg8U+m2Z25lFJrut7ubADDA2TQTKVeRu5msl839gXFfQXgWiFK6n7Kv0f63fcJCXQsInPvpEZwM0c+8vYjeunOIkeTm4psjeLUrCl2IUySbUV/rKibpWgp+jPAKgPWFdWZV6MKrfuw==",
+                //     "encrypted_cvv" => "fvAbNuKYBhICTxcZu9MQ6E6pWxcWicfKbTnQSvqcTSsO28ywLf6MwMyLNXKn3h+1+6dr0yBPT/gfKBafKvCkkSKAQvzfiPPOg5cgEqaHhnCH2QQQ1eIYSrj42aJnOj03JSYYlYifAnXBX4bFVnBj1XNfj65Ay5V+WdlfhJmYWKHs7F/vzTvKpU0dVDMKytEZBzDM3Sy7dTz9DW8lZVu5KPUSIkSehwuqGqe7mEEXDzaf1xZfHG8lH2lAB2zdQO+NmuZsG2T6pIGcWAYItWGuotSrSI0gsiD9ncSgoYUyYDUDX07jPYcBWsiGa+10CifzJzq6aNGJa6ksIdVjN0KtZw==",
+                //     "encrypted_expiration_month" => "oZPkf4ueX8lxzkF/k9+2BkOgKhoMsSq8SV+VYwM5wBokOKAv5or0d7EW//8SbRDPgFbjBY7YUderc/tmYbiio1LYMxkaJq2ZXDdbqmEtcZoI/bbBIPJJAF/K4SH241Q+LCMpejugKjNvfgJ8OI8+Il85WEwXcZ/EdocGEqMgWbisV0L4+o/35xv+gf+tVfDYvKhJhhDFIy/wW7UrnTuH4NE0+DXHdoYuxEYqBiC7NcBpv5Zd8fc2q0ub0Og0N4NliLln0/ETxvmY9C/K3h2BwdTW9SYd3nwMAi63fb4RNI62KBeubR6unILXnRHCC+N1BkSEcFWXystIXZLtFSatgw==",
+                //     "encrypted_expiration_year" => "aXWZItwHBIsJA16Qgyu7bT0CDyO3lTD/Wd0ZSJA9d2unNBc28NGQjn8SBy3vVR1TB7mZOvjuqvfmq21fO2NcpE/thMubZH+suu/wpXkarmTsIzWODs66nrIgUsejBafFHnyIY9a9/hyVGlT9B+9WvQUcizIoRMafxLV1CCzrG3tlEudI6aqqsfKPdv0N9neYNtFWImlfWduxzGb0wGXs6BaJmY7Yhd3X+5cYwqGyZwWLSGiPpeMgaZXNS1m8fnTtW2Dd0D4PtHOFpfmLYyuVwS2N8OahCGDmm7Z3GmyH1Wm5XurYLxc4Qd6QcZq7ORt5MzBoV8LhIYrPSa6hFvwy+A==",
+                // ],
+                "data" => $encryptedCard,
             ],
             "customer" => [
-                "first_name" => "dk",
-                "last_name" => "gupta",
-                "email" => "dilipkumargupta631@gmail.com",
+                "first_name" => $request->customer_name,
+                "last_name" => $request->customer_name,
+                'email'  => 'qurePayment@gmail.com',
                 "phone" => "+85596861409",
                 "address" => "poipet",
                 "city" => "poipet",
@@ -135,26 +136,100 @@ class QorePaymentController extends Controller
                 "language" => "en-US",
             ],
             "metadata" => (object) [],
-            "return_url" => "https://merchant.example.com/return",
+            "return_url" => url('qp/deposit/gatewayResponse'),
+            // "return_url" => 'https://sprint.zaffranpay.com/qp/deposit/gatewayResponse',
         ]);
         $result = $response->json();
 
-       
         echo "<pre>"; print_r($result); die;
 
-// $response = Http::withToken($accessToken)
-//     ->withHeaders([
-//         'Content-Type' => 'application/json',
-//         'Accept' => 'application/json',
-//         'User-Agent' => 'PostmanTestClient/1.0',
-//     ])
-//     ->withBody($json, 'application/json')
-//     ->send('POST', $apiUrl);
+         // for Xprixo deposit charge START
+        if(!empty($cleanAmount)){
+            $percentage = $res['parameters']['percentage_charge'];     // Deposit Charge for RichPay
+            $totalWidth = $cleanAmount;
+            $mdr_fee_amount = ($percentage / 100) * $totalWidth;
+            $net_amount= $totalWidth-$mdr_fee_amount;
+        }
+        // for Xprixo deposit charge END
 
-//         $result = $response->json();
+        if ( isset($result)  &&  $result['status'] == 'APPROVED' ) {
+                //Insert data into DB
+                $addRecord = [
+                    'agent_id' => $res['merchantdata']['agent_id'],
+                    'merchant_id' => $res['merchantdata']['id'],
+                    'merchant_code' => $request->merchant_code,
+                    'reference_id' => $request->referenceId,
+                    'systemgenerated_TransId' => $frtransaction,
+                    'gateway_TransId' => $result['result']['id'] ?? '',
+                    'callback_url' => $request->callback_url,
+                    'amount' => $cleanAmount,
+                    'Currency' => $request->Currency,
+                    'payment_channel' => $res['channel']['id'] ?? '',
+                    'payment_method' => $res['gateway_account']['payment_method'] ?? 'QR Payment',
+                    'request_data' => json_encode($postData),
+                    'gateway_name' => $res['gateway_account']['gateway_name'],
+                    'customer_name' => $request->customer_name,
+                    'payin_arr' => json_encode($result),
+                    'receipt_url' => $result['result']['redirect_url'] ?? '',
+                    'ip_address' => $client_ip,
+                    'net_amount' => $net_amount ?? '',
+                    'mdr_fee_amount' => $mdr_fee_amount ?? '',
+                ];
+                DepositTransaction::create($addRecord);
 
-//         echo "<pre>"; print_r($result); die;
-        // Deposit charge calc
+                
+                // Broadcast the event Notification code START
+                $data = [
+                    'type' => 'Deposit',
+                    'transaction_id' => $frtransaction,
+                    'amount' => $request->amount,
+                    'Currency' => $request->Currency,
+                    'status' => 'pending',
+                    'msg' => 'New Deposit Transaction Created!',
+                ];
+                event(new DepositCreated($data));   
+                // Broadcast the event Notification code END
+                // Insert data in Notification table Code START
+                $merchant=Merchant::where('merchant_code', $request->merchant_code)->first();
+                $addNotificationRecord = [
+                    'notifiable_type' => 'Deposit',
+                    'agent_id' => $merchant->agent_id,
+                    'merchant_id' => $merchant->id,
+                    'data' => json_encode($data,true),
+                    'msg' => 'New Deposit Transaction Created!',
+                ];
+                TransactionNotification::create($addNotificationRecord);
+                // Insert data in Notification table Code END
+
+                return redirect($result['value']);
+        } else {
+                $addRecord = [
+                    'agent_id' => $res['merchantdata']['agent_id'],
+                    'merchant_id' => $res['merchantdata']['id'],
+                    'merchant_code' => $request->merchant_code,
+                    'reference_id' => $request->referenceId,
+                    'systemgenerated_TransId' => $frtransaction,
+                    'callback_url' => $request->callback_url,
+                    'amount' => $cleanAmount,
+                    'Currency' => $request->Currency,
+                    'payment_channel' => $res['channel']['id'] ?? '',
+                    'payment_method' => $res['gateway_account']['payment_method'] ?? 'QR Payment',
+                    'request_data' => json_encode($postData),
+                    'gateway_name' => $res['gateway_account']['gateway_name'],
+                    'customer_name' => $request->customer_name ?? $request->bank_account_name,
+                    // 'customer_email' => $request->customer_email,
+                    'payin_arr' => json_encode($result),
+                    'receipt_url' => $result['message'] ?? '',
+                    'ip_address' => $client_ip,
+                    'net_amount' => $net_amount ?? '',
+                    'mdr_fee_amount' => $mdr_fee_amount ?? '',
+                    'payment_status' => 'failed',
+                ];
+                DepositTransaction::create($addRecord);
+                echo "Unexpected Response"; echo "<pre>"; print_r($result); die;
+        }
+
+
       
     }
 

@@ -74,7 +74,7 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-md-4 col-form-label"><strong>Amount</strong><span class="text-danger">*</span></label>
                                             <div class="col-md-8">
-                                                <input class="form-control" name="amount" id="amountInput" placeholder="Enter your Amount" value="1" type="text">
+                                                <input class="form-control" name="amount" id="amountInput" placeholder="Enter your Amount" value="10" type="text">
                                             </div>
                                         </div>
                                         <div class="form-group row">
