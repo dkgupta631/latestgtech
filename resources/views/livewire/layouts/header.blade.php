@@ -139,12 +139,13 @@
     <div class="logo-box">
         <a href="/" class="logo text-center logo-dark">
             <span class="logo-lg">
-                <img src="{{ URL::to('newassets/images/logo-Gtech.png') }}" alt="" height="22">
-                <!-- <span class="logo-lg-text-dark">Uplon</span> -->
+                <img src="{{ URL::to('newassets/images/money-magnet-sm-logo.png') }}" class="rounded-circle shadow-sm"
+             style="height:48px;width:48px;object-fit:cover;" alt="" >  <span style="font-size:18px;font-weight:600;color:#34495e;">
+                Money Magnet</span>
             </span>
             <span class="logo-sm">
-                <!-- <span class="logo-lg-text-dark">U</span> -->
-                <img src="{{ URL::to('newassets/images/logo-Gtech.png') }}" alt="" height="15">
+                <img src="{{ URL::to('newassets/images/money-magnet-sm-logo.png') }}" alt="" class="rounded-circle shadow-sm"
+             style="height:48px;width:48px;object-fit:cover;">
             </span>
         </a>
     </div>
