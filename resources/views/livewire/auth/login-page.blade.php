@@ -6,7 +6,7 @@
                     <div class="text-center">
                         <div class="my-3">
                             <a href="#">
-                                <span><img src="{{ URL::to('newassets/images/logo-Gtech.png') }}" alt="" height="28"></span>
+                                <span><img src="{{ URL::to('newassets/images/money-magnet-logo1.jpg') }}" alt="" height="100" style="border-radius: 50%;"></span>
                             </a>
                         </div>
                         <h5 class="text-muted text-uppercase py-3 font-16">Login your account</h5>
