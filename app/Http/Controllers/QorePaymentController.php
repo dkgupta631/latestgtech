@@ -87,77 +87,59 @@ class QorePaymentController extends Controller
 
     
 
-        echo $accessToken = $this->getAccessToken(
+         $accessToken = $this->getAccessToken(
             $res['parameters']['token_url'],
             $res['parameters']['client_id'],
             $res['parameters']['client_secret']
         );
 
-        $payload = [
-            'terminal_id' => 't-orionedge',
-            'reference' => 'TR202607301732145111',
-            'description' => 'Card purchase in USD',
-            'currency' => 'USD',
-            'amount' => 1,
-            'transaction_type' => 'PURCHASE',
-
-            'payment_method' => [
-                'type' => 'card',
-                'data' => [
-                    'encrypted_card_number' => 'TZSFOYulf+itpLHp9RCVtIrJ/BBQr7sMvzEN9+NjoklArkLCy4O4pUzfWP0hD6QpuRDDjPmqQGnrlFo2H895kaDAeI4l6h36vxJ5+6pooMFC9TBtcI+20FORm0KlNaYT14wnxVwNKY6pXvh2b6h/awbX7QHvTOXUvJPYvkGlh6U7g/XzN9lrdvEmjozisNWORFOQzZVnJv+YTg8U+m2Z25lFJrut7ubADDA2TQTKVeRu5msl839gXFfQXgWiFK6n7Kv0f63fcJCXQsInPvpEZwM0c+8vYjeunOIkeTm4psjeLUrCl2IUySbUV/rKibpWgp+jPAKgPWFdWZV6MKrfuw==',
-                    'encrypted_cvv' => 'fvAbNuKYBhICTxcZu9MQ6E6pWxcWicfKbTnQSvqcTSsO28ywLf6MwMyLNXKn3h+1+6dr0yBPT/gfKBafKvCkkSKAQvzfiPPOg5cgEqaHhnCH2QQQ1eIYSrj42aJnOj03JSYYlYifAnXBX4bFVnBj1XNfj65Ay5V+WdlfhJmYWKHs7F/vzTvKpU0dVDMKytEZBzDM3Sy7dTz9DW8lZVu5KPUSIkSehwuqGqe7mEEXDzaf1xZfHG8lH2lAB2zdQO+NmuZsG2T6pIGcWAYItWGuotSrSI0gsiD9ncSgoYUyYDUDX07jPYcBWsiGa+10CifzJzq6aNGJa6ksIdVjN0KtZw==',
-                    'encrypted_expiration_month' => 'oZPkf4ueX8lxzkF/k9+2BkOgKhoMsSq8SV+VYwM5wBokOKAv5or0d7EW//8SbRDPgFbjBY7YUderc/tmYbiio1LYMxkaJq2ZXDdbqmEtcZoI/bbBIPJJAF/K4SH241Q+LCMpejugKjNvfgJ8OI8+Il85WEwXcZ/EdocGEqMgWbisV0L4+o/35xv+gf+tVfDYvKhJhhDFIy/wW7UrnTuH4NE0+DXHdoYuxEYqBiC7NcBpv5Zd8fc2q0ub0Og0N4NliLln0/ETxvmY9C/K3h2BwdTW9SYd3nwMAi63fb4RNI62KBeubR6unILXnRHCC+N1BkSEcFWXystIXZLtFSatgw==',
-                    'encrypted_expiration_year' => 'aXWZItwHBIsJA16Qgyu7bT0CDyO3lTD/Wd0ZSJA9d2unNBc28NGQjn8SBy3vVR1TB7mZOvjuqvfmq21fO2NcpE/thMubZH+suu/wpXkarmTsIzWODs66nrIgUsejBafFHnyIY9a9/hyVGlT9B+9WvQUcizIoRMafxLV1CCzrG3tlEudI6aqqsfKPdv0N9neYNtFWImlfWduxzGb0wGXs6BaJmY7Yhd3X+5cYwqGyZwWLSGiPpeMgaZXNS1m8fnTtW2Dd0D4PtHOFpfmLYyuVwS2N8OahCGDmm7Z3GmyH1Wm5XurYLxc4Qd6QcZq7ORt5MzBoV8LhIYrPSa6hFvwy+A==',
-                ],
-            ],
-
-            'customer' => [
-                'first_name' => 'dk',
-                'last_name' => 'gupta',
-                'email' => 'dilipkumargupta631@gmail.com',
-                'phone' => '+85596861409',
-                'address' => 'poipet',
-                'city' => 'poipet',
-                'country' => 'KH',
-                'postal_code' => '273154',
-            ],
-
-            'browser_info' => [
-                'user_agent' => 'Mozilla/5.0',
-                'accept_header' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                'java_enabled' => false,
-                'color_depth' => 24,
-                'screen_height' => 1080,
-                'screen_width' => 1920,
-                'time_zone_offset' => -120,
-                'language' => 'en-US',
-            ],
-
-            'metadata' => [],
-
-            'return_url' => 'https://merchant.example.com/return',
-        ];
-         echo "<pre>"; print_r($payload);
-        $response = Http::withHeaders([
+         $response = Http::withHeaders([
             'Content-Type' => 'application/json; charset=utf-8',
             'Accept' => 'application/json',
             'User-Agent' => 'PostmanTestClient/1.0',
-            'Authorization' => 'Bearer ' . $accessToken,
-        ])->post(
-            'https://api.qorepayments.com/api/transactions/authorize',
-            $payload
-        );
+            'Authorization' => 'Bearer '.$accessToken, // truncated for safety
+        ])->post('https://api.qorepayments.com/api/transactions/authorize', [
+            "terminal_id" => "t-orionedge",
+            "reference" => "TR202607301732145111",
+            "description" => "Card purchase in USD",
+            "currency" => "USD",
+            "amount" => 1,
+            "transaction_type" => "PURCHASE",
+            "payment_method" => [
+                "type" => "card",
+                "data" => [
+                    "encrypted_card_number" => "TZSFOYulf+itpLHp9RCVtIrJ/BBQr7sMvzEN9+NjoklArkLCy4O4pUzfWP0hD6QpuRDDjPmqQGnrlFo2H895kaDAeI4l6h36vxJ5+6pooMFC9TBtcI+20FORm0KlNaYT14wnxVwNKY6pXvh2b6h/awbX7QHvTOXUvJPYvkGlh6U7g/XzN9lrdvEmjozisNWORFOQzZVnJv+YTg8U+m2Z25lFJrut7ubADDA2TQTKVeRu5msl839gXFfQXgWiFK6n7Kv0f63fcJCXQsInPvpEZwM0c+8vYjeunOIkeTm4psjeLUrCl2IUySbUV/rKibpWgp+jPAKgPWFdWZV6MKrfuw==",
+                    "encrypted_cvv" => "fvAbNuKYBhICTxcZu9MQ6E6pWxcWicfKbTnQSvqcTSsO28ywLf6MwMyLNXKn3h+1+6dr0yBPT/gfKBafKvCkkSKAQvzfiPPOg5cgEqaHhnCH2QQQ1eIYSrj42aJnOj03JSYYlYifAnXBX4bFVnBj1XNfj65Ay5V+WdlfhJmYWKHs7F/vzTvKpU0dVDMKytEZBzDM3Sy7dTz9DW8lZVu5KPUSIkSehwuqGqe7mEEXDzaf1xZfHG8lH2lAB2zdQO+NmuZsG2T6pIGcWAYItWGuotSrSI0gsiD9ncSgoYUyYDUDX07jPYcBWsiGa+10CifzJzq6aNGJa6ksIdVjN0KtZw==",
+                    "encrypted_expiration_month" => "oZPkf4ueX8lxzkF/k9+2BkOgKhoMsSq8SV+VYwM5wBokOKAv5or0d7EW//8SbRDPgFbjBY7YUderc/tmYbiio1LYMxkaJq2ZXDdbqmEtcZoI/bbBIPJJAF/K4SH241Q+LCMpejugKjNvfgJ8OI8+Il85WEwXcZ/EdocGEqMgWbisV0L4+o/35xv+gf+tVfDYvKhJhhDFIy/wW7UrnTuH4NE0+DXHdoYuxEYqBiC7NcBpv5Zd8fc2q0ub0Og0N4NliLln0/ETxvmY9C/K3h2BwdTW9SYd3nwMAi63fb4RNI62KBeubR6unILXnRHCC+N1BkSEcFWXystIXZLtFSatgw==",
+                    "encrypted_expiration_year" => "aXWZItwHBIsJA16Qgyu7bT0CDyO3lTD/Wd0ZSJA9d2unNBc28NGQjn8SBy3vVR1TB7mZOvjuqvfmq21fO2NcpE/thMubZH+suu/wpXkarmTsIzWODs66nrIgUsejBafFHnyIY9a9/hyVGlT9B+9WvQUcizIoRMafxLV1CCzrG3tlEudI6aqqsfKPdv0N9neYNtFWImlfWduxzGb0wGXs6BaJmY7Yhd3X+5cYwqGyZwWLSGiPpeMgaZXNS1m8fnTtW2Dd0D4PtHOFpfmLYyuVwS2N8OahCGDmm7Z3GmyH1Wm5XurYLxc4Qd6QcZq7ORt5MzBoV8LhIYrPSa6hFvwy+A==",
+                ],
+            ],
+            "customer" => [
+                "first_name" => "dk",
+                "last_name" => "gupta",
+                "email" => "dilipkumargupta631@gmail.com",
+                "phone" => "+85596861409",
+                "address" => "poipet",
+                "city" => "poipet",
+                "country" => "KH",
+                "postal_code" => "273154",
+            ],
+            "browser_info" => [
+                "user_agent" => "Mozilla/5.0",
+                "accept_header" => "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "java_enabled" => false,
+                "color_depth" => 24,
+                "screen_height" => 1080,
+                "screen_width" => 1920,
+                "time_zone_offset" => -120,
+                "language" => "en-US",
+            ],
+            "metadata" => (object) [],
+            "return_url" => "https://merchant.example.com/return",
+        ]);
+        $result = $response->json();
 
-        return response()->json([
-            'status' => $response->status(),
-            'success' => $response->successful(),
-            'response' => $response->json(),
-        ], $response->status());
        
-
-            $result = $response->json();
-
-        echo "<pre>"; print_r($response); 
         echo "<pre>"; print_r($result); die;
 
 // $response = Http::withToken($accessToken)
