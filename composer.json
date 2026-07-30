@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.10.1",
         "livewire/livewire": "3.5",
         "maatwebsite/excel": "^3.1",
+        "phpseclib/phpseclib": "3.0",
         "pusher/pusher-php-server": "^7.2",
         "simplesoftwareio/simple-qrcode": "~4"
     },

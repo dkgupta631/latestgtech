@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RichPayController;
 use App\Http\Controllers\IpintPaymentController;
 use App\Http\Controllers\XprizoPaymentController;
+use App\Http\Controllers\QorePaymentController;
 
 
 Route::get('/user', function (Request $request) {
@@ -36,4 +37,12 @@ Route::controller(XprizoPaymentController::class)->group(function () {
    
     // Route::get('xpz/withdrawal/', 'xpzwithdrawApifun')->name('apiroute.xpz.withdrawalApi');
     // Route::post('xpz/withdrawalResponse', 'xpzWithdrawalResponse')->name('apiroute.xpzWithdrawalResponse'); 
+});
+
+
+Route::controller(QorePaymentController::class)->group(function () {
+    Route::get('qore/deposit/', 'qoreDepositApifun')->name('apiroute.CardDepositApi');
+    Route::post('qore/depositResponse', 'qoreDepositResponse')->name('apiroute.DepositResponse'); 
+    Route::post('/qoreWebhookNotifiication', 'qoreWebhookNotifiication');
+  
 });

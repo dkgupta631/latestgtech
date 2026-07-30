@@ -1,0 +1,248 @@
+<?php
+namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Validator;
+use App\Models\GatewayAccount;
+use App\Models\GatewayChannel;
+use App\Models\GatewayChannelParameter;
+use App\Models\GatewayConfigurationMerchant;
+use App\Models\DepositTransaction;
+use App\Models\Merchant;
+use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
+use Session;
+
+use App\Events\DepositCreated;
+use App\Models\TransactionNotification;
+
+
+use App\Services\QoreCardEncryptor;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+
+class QorePaymentController extends Controller
+{
+    public function qoreDepositform(Request $request)
+    {
+        return view('payment-form.qore.deposit-form');
+    }
+
+   public function qoreDepositApifun(Request $request)
+    {
+        $validatedData = $request->validate([
+            'referenceId'   => 'required',
+            'Currency'      => 'required',
+            'amount'        => 'required',
+            'customer_name' => 'required',
+            'card_number'   => 'required',
+            'cvv'           => 'required',
+        ]);
+
+        // fetching gateway details
+        $res = RichPayController::getGatewayParameters($request->merchant_code, $request->channel_id);
+        if (in_array($res, [
+            'Invalid Merchant!', 'Merchant is Disabled!', 'Invalid Channel!', 'Channel is Disabled!',
+            'Gateway is Disabled!', 'Gateway not configured for this Merchant!',
+            'Gateway configuration is Disabled for this Merchant!', 'Parameter not set!',
+        ])) {
+            echo "<pre>"; print_r($res); die;
+        }
+
+        
+        $client_ip   = $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'];
+        $cleanAmount = str_replace(",", "", $request->amount);
+        $frtransaction = RichPayController::generateUniqueCode();
+
+        // Expiry parsing
+        $expiration = $request->expiration;
+        if (empty($expiration)) {
+            $expiryMonth = $request->expiryMonth;
+            $expiryYear  = $request->expiryYear;
+        } else {
+            [$expiryMonth, $expiryYear] = explode('/', $expiration);
+        }
+        $expiryMonth = str_pad(trim($expiryMonth), 2, '0', STR_PAD_LEFT);
+        $expiryYear  = strlen(trim($expiryYear)) === 2 ? '20' . trim($expiryYear) : trim($expiryYear);
+
+        // Encrypt card fields with the merchant's public key
+        $encryptedCard = QoreCardEncryptor::encryptCardData(
+            $request->card_number,
+            $request->cvv,
+            $expiryMonth,
+            $expiryYear,
+            $res['parameters']['merchant_public_key']
+        );
+
+        // Sanity check — API rejects the whole payment_method block if any of these are empty
+        foreach ($encryptedCard as $key => $value) {
+            if (empty($value)) {
+                echo "<pre>"; print_r("Encryption failed for {$key}, aborting before API call."); die;
+            }
+        }
+
+      
+    
+      
+
+    
+
+        echo $accessToken = $this->getAccessToken(
+            $res['parameters']['token_url'],
+            $res['parameters']['client_id'],
+            $res['parameters']['client_secret']
+        );
+
+        $payload = [
+            'terminal_id' => 't-orionedge',
+            'reference' => 'TR202607301732145111',
+            'description' => 'Card purchase in USD',
+            'currency' => 'USD',
+            'amount' => 1,
+            'transaction_type' => 'PURCHASE',
+
+            'payment_method' => [
+                'type' => 'card',
+                'data' => [
+                    'encrypted_card_number' => 'TZSFOYulf+itpLHp9RCVtIrJ/BBQr7sMvzEN9+NjoklArkLCy4O4pUzfWP0hD6QpuRDDjPmqQGnrlFo2H895kaDAeI4l6h36vxJ5+6pooMFC9TBtcI+20FORm0KlNaYT14wnxVwNKY6pXvh2b6h/awbX7QHvTOXUvJPYvkGlh6U7g/XzN9lrdvEmjozisNWORFOQzZVnJv+YTg8U+m2Z25lFJrut7ubADDA2TQTKVeRu5msl839gXFfQXgWiFK6n7Kv0f63fcJCXQsInPvpEZwM0c+8vYjeunOIkeTm4psjeLUrCl2IUySbUV/rKibpWgp+jPAKgPWFdWZV6MKrfuw==',
+                    'encrypted_cvv' => 'fvAbNuKYBhICTxcZu9MQ6E6pWxcWicfKbTnQSvqcTSsO28ywLf6MwMyLNXKn3h+1+6dr0yBPT/gfKBafKvCkkSKAQvzfiPPOg5cgEqaHhnCH2QQQ1eIYSrj42aJnOj03JSYYlYifAnXBX4bFVnBj1XNfj65Ay5V+WdlfhJmYWKHs7F/vzTvKpU0dVDMKytEZBzDM3Sy7dTz9DW8lZVu5KPUSIkSehwuqGqe7mEEXDzaf1xZfHG8lH2lAB2zdQO+NmuZsG2T6pIGcWAYItWGuotSrSI0gsiD9ncSgoYUyYDUDX07jPYcBWsiGa+10CifzJzq6aNGJa6ksIdVjN0KtZw==',
+                    'encrypted_expiration_month' => 'oZPkf4ueX8lxzkF/k9+2BkOgKhoMsSq8SV+VYwM5wBokOKAv5or0d7EW//8SbRDPgFbjBY7YUderc/tmYbiio1LYMxkaJq2ZXDdbqmEtcZoI/bbBIPJJAF/K4SH241Q+LCMpejugKjNvfgJ8OI8+Il85WEwXcZ/EdocGEqMgWbisV0L4+o/35xv+gf+tVfDYvKhJhhDFIy/wW7UrnTuH4NE0+DXHdoYuxEYqBiC7NcBpv5Zd8fc2q0ub0Og0N4NliLln0/ETxvmY9C/K3h2BwdTW9SYd3nwMAi63fb4RNI62KBeubR6unILXnRHCC+N1BkSEcFWXystIXZLtFSatgw==',
+                    'encrypted_expiration_year' => 'aXWZItwHBIsJA16Qgyu7bT0CDyO3lTD/Wd0ZSJA9d2unNBc28NGQjn8SBy3vVR1TB7mZOvjuqvfmq21fO2NcpE/thMubZH+suu/wpXkarmTsIzWODs66nrIgUsejBafFHnyIY9a9/hyVGlT9B+9WvQUcizIoRMafxLV1CCzrG3tlEudI6aqqsfKPdv0N9neYNtFWImlfWduxzGb0wGXs6BaJmY7Yhd3X+5cYwqGyZwWLSGiPpeMgaZXNS1m8fnTtW2Dd0D4PtHOFpfmLYyuVwS2N8OahCGDmm7Z3GmyH1Wm5XurYLxc4Qd6QcZq7ORt5MzBoV8LhIYrPSa6hFvwy+A==',
+                ],
+            ],
+
+            'customer' => [
+                'first_name' => 'dk',
+                'last_name' => 'gupta',
+                'email' => 'dilipkumargupta631@gmail.com',
+                'phone' => '+85596861409',
+                'address' => 'poipet',
+                'city' => 'poipet',
+                'country' => 'KH',
+                'postal_code' => '273154',
+            ],
+
+            'browser_info' => [
+                'user_agent' => 'Mozilla/5.0',
+                'accept_header' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'java_enabled' => false,
+                'color_depth' => 24,
+                'screen_height' => 1080,
+                'screen_width' => 1920,
+                'time_zone_offset' => -120,
+                'language' => 'en-US',
+            ],
+
+            'metadata' => [],
+
+            'return_url' => 'https://merchant.example.com/return',
+        ];
+         echo "<pre>"; print_r($payload);
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json; charset=utf-8',
+            'Accept' => 'application/json',
+            'User-Agent' => 'PostmanTestClient/1.0',
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->post(
+            'https://api.qorepayments.com/api/transactions/authorize',
+            $payload
+        );
+
+        return response()->json([
+            'status' => $response->status(),
+            'success' => $response->successful(),
+            'response' => $response->json(),
+        ], $response->status());
+       
+
+            $result = $response->json();
+
+        echo "<pre>"; print_r($response); 
+        echo "<pre>"; print_r($result); die;
+
+// $response = Http::withToken($accessToken)
+//     ->withHeaders([
+//         'Content-Type' => 'application/json',
+//         'Accept' => 'application/json',
+//         'User-Agent' => 'PostmanTestClient/1.0',
+//     ])
+//     ->withBody($json, 'application/json')
+//     ->send('POST', $apiUrl);
+
+//         $result = $response->json();
+
+//         echo "<pre>"; print_r($result); die;
+        // Deposit charge calc
+      
+    }
+
+    protected function getAccessToken($token_url, $client_id, $client_secret): string
+    {
+        return Cache::remember('qore_access_token', 45, function () use ($token_url, $client_id, $client_secret) {
+            $response = Http::asForm()->post($token_url, [
+                'grant_type'    => 'client_credentials',
+                'client_id'     => $client_id,
+                'client_secret' => $client_secret,
+            ]);
+
+            return $response->json('access_token');
+        });
+    }
+
+    public function qpDepositGatewayResponse(Request $request)
+    {
+            $response = $request->all();
+            $systemgenerated_TransId = $response['reference'] ?? null;
+            $gateway_TransId = $response['key'] ?? null;
+        
+            $orderstatus = match ($response['status'] ?? null) {
+                'Active' => 'success',
+                'Pending' => 'pending',
+                default => 'failed',
+            };
+     
+                $updateData = [
+                    'gateway_TransId' => $gateway_TransId,
+                    'payment_status' => $orderstatus,
+                    'payin_arr' => json_encode($response)
+                ];
+                DepositTransaction::where('systemgenerated_TransId', $systemgenerated_TransId)->update($updateData);
+                $paymentDetail = DepositTransaction::where('systemgenerated_TransId', $systemgenerated_TransId)->first();
+                        // Broadcast the event Notification code START
+                        $data = [
+                            'type' => 'Transaction Updated',
+                            'transaction_id' => $paymentDetail->systemgenerated_TransId,
+                            'amount' => $paymentDetail->amount,
+                            'Currency' => $paymentDetail->Currency,
+                            'status' => $paymentDetail->payment_status,
+                            'msg' => 'Transaction Status Updated!',
+                        ];
+                        event(new DepositCreated($data));   
+                        // Broadcast the event Notification code END
+                        // Insert data in Notification table Code START
+                        $addNotificationRecord = [
+                            'notifiable_type' => 'Transaction Updated',
+                            'agent_id' => $paymentDetail->agent_id,
+                            'merchant_id' => $paymentDetail->merchant_id,
+                            'data' => json_encode($data,true),
+                            'msg' => 'Transaction Status Updated!',
+                        ];
+                        TransactionNotification::create($addNotificationRecord);
+                    // Insert data in Notification table Code END
+
+                $callbackUrl = $paymentDetail->callback_url;
+                $postData = [
+                    'merchant_code' => $paymentDetail->merchant_code,
+                    'referenceId' => $paymentDetail->reference_id,
+                    'transaction_id' => $paymentDetail->systemgenerated_TransId,
+                    'amount' => $paymentDetail->amount,
+                    'Currency' => $paymentDetail->Currency,
+                    'customer_name' => $paymentDetail->customer_name,
+                    'payment_status' => $paymentDetail->payment_status,
+                    'created_at' => $paymentDetail->created_at,
+                ];
+                return view('payment.payment_status', compact('request', 'postData', 'callbackUrl'));
+            
+    }
+    
+}
