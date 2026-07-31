@@ -1,4 +1,3 @@
-
 @extends('components.layouts.controllerlayouts')
 @section('content')
 <?php
@@ -48,7 +47,7 @@
                             <div class="card mb-0">
                                 <div class="card-body">
                                     <div class="text-center">
-                                        <h2 class="text-muted text-uppercase py-3"><b>GTech Card Deposit USD</b></h2>
+                                        <h2 class="text-muted text-uppercase py-3"><b>Card Deposit USD/EUR</b></h2>
                                     </div>
                                     <form role="form" action="{{ route('apiroute.CardDepositApi') }}" method="GET" id="paymentForm" class="parsley-examples" data-parsley-validate novalidate>
                                     @csrf
@@ -64,7 +63,7 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-md-4 col-form-label"><strong>Currency</strong><span class="text-danger">*</span></label>
                                             <div class="col-md-8">
-                                                <select class="form-control" name="Currency" required>
+                                                <select class="form-control" name="Currency" id="currencySelect" required>
                                                     <option value="">---</option>
                                                     <option value="EUR">EUR</option>
                                                     <option value="USD" selected>USD</option>
@@ -121,7 +120,7 @@
                                             <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..."> <!-- Replace with your spinner image URL -->
                                         </div>
                                         <div class="form-group text-center">
-                                            <button type="submit" id="submitBtn" class="card-btn btn btn-block btn-lg btn-primary waves-effect waves-light">Pay Now <span id="amountLabel">2</span>$ <i class="mdi mdi-arrow-right"></i></button>
+                                            <button type="submit" id="submitBtn" class="card-btn btn btn-block btn-lg btn-primary waves-effect waves-light">Pay Now <span id="amountLabel">2</span><span id="currencySymbolLabel">$</span> <i class="mdi mdi-arrow-right"></i></button>
                                         </div>
                                     </form>
                                 </div> <!-- end card-body -->
@@ -147,6 +146,33 @@
 </script>
 <script>
 $(document).ready(function() {
+
+    // Map currency code to its symbol
+    function getCurrencySymbol(currency) {
+        switch (currency) {
+            case 'EUR':
+                return '€';
+            case 'USD':
+                return '$';
+            default:
+                return '';
+        }
+    }
+
+    // Update the currency symbol shown on the Pay Now button
+    function updateCurrencySymbol() {
+        var currency = $("#currencySelect").val();
+        $("#currencySymbolLabel").text(getCurrencySymbol(currency));
+    }
+
+    // Set the correct symbol on initial page load (based on default selected option)
+    updateCurrencySymbol();
+
+    // Update symbol whenever the currency selection changes
+    $("#currencySelect").on("change", function() {
+        updateCurrencySymbol();
+    });
+
     $("#amountInput").on("input", function() {
         let amount = $(this).val();
         // Regular expression to allow only integers or decimals
