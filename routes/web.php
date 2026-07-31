@@ -110,11 +110,7 @@ Route::controller(XprizoPaymentController::class)->group(function () {
     Route::get('/xpzUPIpayment', 'xpzUPIdeposit');            // UPI Deposit form 
     Route::get('xpz/UPIdepositResponse/{frtransaction}/{merchantCode}/{channelId}', 'TransactionStatusUPIfun');       // for redirect check transaction status
 
-
-
     Route::get('/xpzDeposit-THB', 'xpzDepositformTHB');            // Card Deposit form USD
-
-
 
     // Route::get('/xpzWithdrawal', 'xpzWithdrawalform');            // Withdrawal form
 });
@@ -130,6 +126,9 @@ Route::controller(QorePaymentController::class)->group(function () {
     Route::get('/QCardDeposit', 'qoreDepositform');            // Card Deposit form 
     Route::get('qp/deposit/gatewayResponse', 'qpDepositGatewayResponse');       // for gateway response
    
+});
+Route::get('/qp/cardDepositTest', function () {
+    return view('payment-form.qore.cardDeposittest');
 });
 
 

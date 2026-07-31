@@ -34,7 +34,7 @@ class QorePaymentController extends Controller
             'referenceId'   => 'required',
             'Currency'      => 'required',
             'amount'        => 'required',
-            'customer_name' => 'required',
+            'card_holder_name' => 'required',
             'card_number'   => 'required',
             'cvv'           => 'required',
         ]);
@@ -116,8 +116,8 @@ class QorePaymentController extends Controller
                 "data" => $encryptedCard,
             ],
             "customer" => [
-                "first_name" => $request->customer_name,
-                "last_name" => $request->customer_name,
+                "first_name" => $request->card_holder_name,
+                "last_name" => $request->card_holder_name,
                 'email'  => 'qurePayment@gmail.com',
                 "phone" => "+85596861409",
                 "address" => "poipet",
@@ -168,7 +168,7 @@ class QorePaymentController extends Controller
                     'payment_method' => $res['gateway_account']['payment_method'] ?? 'QR Payment',
                     'request_data' => json_encode($res),
                     'gateway_name' => $res['gateway_account']['gateway_name'],
-                    'customer_name' => $request->customer_name,
+                    'customer_name' => $request->card_holder_name,
                     'payin_arr' => json_encode($result),
                     'receipt_url' => $result['result']['redirect_url'] ?? '',
                     'ip_address' => $client_ip,
@@ -223,7 +223,7 @@ class QorePaymentController extends Controller
                     'payment_method' => $res['gateway_account']['payment_method'] ?? 'QR Payment',
                     'request_data' => json_encode($res),
                     'gateway_name' => $res['gateway_account']['gateway_name'],
-                    'customer_name' => $request->customer_name ?? $request->bank_account_name,
+                    'customer_name' => $request->card_holder_name,
                     'payin_arr' => json_encode($result),
                     'receipt_url' => $result['result']['errors'][0]['message'] ?? '',
                     'ip_address' => $client_ip,
@@ -239,7 +239,7 @@ class QorePaymentController extends Controller
                                             'status'    => $result['result']['status'],    // APPROVED/INVALID/DECLINED etc.
                                         ])
                                     );
-                                    
+
         }
 
 
