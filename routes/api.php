@@ -41,8 +41,8 @@ Route::controller(XprizoPaymentController::class)->group(function () {
 
 
 Route::controller(QorePaymentController::class)->group(function () {
-    Route::get('qore/deposit/', 'qoreDepositApifun')->name('apiroute.CardDepositApi');
-    Route::post('qore/depositResponse', 'qoreDepositResponse')->name('apiroute.DepositResponse'); 
-    Route::post('/qoreWebhookNotifiication', 'qoreWebhookNotifiication');
+    Route::get('qp/deposit/', 'qoreDepositApifun')->name('apiroute.CardDepositApi');
+    Route::post('qp/depositResponse', 'qoreDepositResponse')->name('apiroute.DepositResponse'); 
+    Route::post('/qpWebhookNotifiication', 'qoreWebhookNotifiication');
   
 });

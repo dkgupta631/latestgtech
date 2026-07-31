@@ -77,11 +77,11 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="customer_name" class="col-md-4 col-form-label"><strong>Card Holder Name</strong><span class="text-danger">*</span></label>
+                                            <label for="card_holder_name" class="col-md-4 col-form-label"><strong>Card Holder Name</strong><span class="text-danger">*</span></label>
                                             <div class="col-md-8">
-                                                <input  class="form-control" name="customer_name" placeholder="Enter cumtomer name" type="text" value="dk gupta">
-                                                @error('customer_name')
-                                                <label class="error" for="customer_name">{{ $message }}</label> 
+                                                <input  class="form-control" name="card_holder_name" placeholder="Enter cumtomer name" type="text" value="dk gupta">
+                                                @error('card_holder_name')
+                                                <label class="error" for="card_holder_name">{{ $message }}</label> 
                                                 @enderror
                                             </div>
                                         </div>

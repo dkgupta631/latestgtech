@@ -8,18 +8,21 @@ $referenceNo = "GZTRN" . time() . (function ($length = 3) {
     }
     return $randomString;
 })();
-// $apiUrl = "http://127.0.0.1:8000/api/ip/checkout";
-$apiUrl = "https://sprint.zaffranpay.com/api/ip/checkout";
+// $apiUrl = "http://127.0.0.1:8000/api/qp/deposit/";
+$apiUrl = "https://sprint.zaffranpay.com/api/qp/deposit/";
 $data = [
     'merchant_code' => $_GET['merchant_code'],
-    'channel_id' => '4',
+    'channel_id' => '8',        // for local 7 , for live 8 
     'referenceId' => $referenceNo, 
-    // 'callback_url' => 'http://127.0.0.1:8000/api/ip/depositResponse',
-    'callback_url' => 'https://sprint.zaffranpay.com/api/ip/depositResponse',
+    // 'callback_url' => 'http://127.0.0.1:8000/api/qp/depositResponse',
+    'callback_url' => 'https://sprint.zaffranpay.com/api/qp/depositResponse',
     'Currency' =>  $_GET['Currency'], 
-    'amount' => $_GET['amount'],   
-    'customer_email' => 'dk@gmail.com', 
-    'customer_name' => 'dk John Doe', 
+    'amount' => $_GET['amount'],    
+    'card_holder_name' => $_GET['card_holder_name'],
+    'card_number' => $_GET['card_number'],
+    'expiryMonth' => $_GET['expiryMonth'],
+    'expiryYear' => $_GET['expiryYear'],
+    'cvv' => $_GET['cvv']
 ];
 $fullUrl = $apiUrl . '?' . http_build_query($data);
 ?>
