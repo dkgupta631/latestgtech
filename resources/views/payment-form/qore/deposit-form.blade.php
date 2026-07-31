@@ -74,7 +74,7 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-md-4 col-form-label"><strong>Amount</strong><span class="text-danger">*</span></label>
                                             <div class="col-md-8">
-                                                <input class="form-control" name="amount" id="amountInput" placeholder="Enter your Amount" value="10" type="text">
+                                                <input class="form-control" name="amount" id="amountInput" placeholder="Enter your Amount" value="2" type="text">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -121,7 +121,7 @@
                                             <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..."> <!-- Replace with your spinner image URL -->
                                         </div>
                                         <div class="form-group text-center">
-                                            <button type="submit" id="submitBtn" class="card-btn btn btn-block btn-lg btn-primary waves-effect waves-light">Pay Now <span id="amountLabel">1</span>$ <i class="mdi mdi-arrow-right"></i></button>
+                                            <button type="submit" id="submitBtn" class="card-btn btn btn-block btn-lg btn-primary waves-effect waves-light">Pay Now <span id="amountLabel">2</span>$ <i class="mdi mdi-arrow-right"></i></button>
                                         </div>
                                     </form>
                                 </div> <!-- end card-body -->
