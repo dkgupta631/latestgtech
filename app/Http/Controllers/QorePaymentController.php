@@ -202,7 +202,13 @@ class QorePaymentController extends Controller
                 TransactionNotification::create($addNotificationRecord);
                 // Insert data in Notification table Code END
 
-                return redirect($result['result']['redirect_url'].'/'.$frtransaction.'/'.$result['result']['status']);
+                return redirect()->to(
+                                        $result['result']['redirect_url'] . '?' . http_build_query([
+                                            'frtransaction' => $frtransaction,                 // systemgenerated_TransId
+                                            'status'    => $result['result']['status'],    // APPROVED/INVALID/DECLINED etc.
+                                        ])
+                                    );
+
         } else {
                 $addRecord = [
                     'agent_id' => $res['merchantdata']['agent_id'],
@@ -247,11 +253,16 @@ class QorePaymentController extends Controller
         });
     }
 
-    public function qpDepositGatewayResponse(Request $request, $frtransaction = null, $status = null)
+    public function qpDepositGatewayResponse(Request $request)
     {
             // $response = $request->all();
-            $systemgenerated_TransId = $frtransaction;
-            $orderstatus = strtoupper($status); 
+            $systemgenerated_TransId = $request->query('frtransaction');
+            $orderstatus = strtoupper($request->query('status'));
+
+            $json = [
+                    'systemgenerated_TransId' => $systemgenerated_TransId,
+                    'orderstatus' => $orderstatus,
+                ];
           
         
             // $orderstatus = match ($response['status'] ?? null) {
@@ -283,7 +294,7 @@ class QorePaymentController extends Controller
      
                 $updateData = [
                     'payment_status' => $paymentStatus,
-                    'payin_arr' => json_encode($response)
+                    'response_data' => json_encode($json)
                 ];
                 DepositTransaction::where('systemgenerated_TransId', $systemgenerated_TransId)->update($updateData);
                 $paymentDetail = DepositTransaction::where('systemgenerated_TransId', $systemgenerated_TransId)->first();
