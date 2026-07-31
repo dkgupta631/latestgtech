@@ -141,7 +141,7 @@ class QorePaymentController extends Controller
         ]);
         $result = $response->json();
 
-        echo "<pre>"; print_r($result);
+        // echo "<pre>"; print_r($result);
 
          // for Xprixo deposit charge START
         if(!empty($cleanAmount)){
@@ -224,16 +224,22 @@ class QorePaymentController extends Controller
                     'request_data' => json_encode($res),
                     'gateway_name' => $res['gateway_account']['gateway_name'],
                     'customer_name' => $request->customer_name ?? $request->bank_account_name,
-                    // 'customer_email' => $request->customer_email,
                     'payin_arr' => json_encode($result),
-                    'receipt_url' => $result['message'] ?? '',
+                    'receipt_url' => $result['result']['errors'][0]['message'] ?? '',
                     'ip_address' => $client_ip,
                     'net_amount' => $net_amount ?? '',
                     'mdr_fee_amount' => $mdr_fee_amount ?? '',
                     'payment_status' => 'failed',
                 ];
                 DepositTransaction::create($addRecord);
-                echo "Unexpected Response"; echo "<pre>"; print_r($result); die;
+                // echo "Unexpected Response"; echo "<pre>"; print_r($result['result']['errors']); die;
+                return redirect()->to(
+                                        $result['result']['redirect_url'] . '?' . http_build_query([
+                                            'frtransaction' => $frtransaction,                 // systemgenerated_TransId
+                                            'status'    => $result['result']['status'],    // APPROVED/INVALID/DECLINED etc.
+                                        ])
+                                    );
+                                    
         }
 
 
