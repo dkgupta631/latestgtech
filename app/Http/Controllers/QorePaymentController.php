@@ -136,12 +136,12 @@ class QorePaymentController extends Controller
                 "language" => "en-US",
             ],
             "metadata" => (object) [],
-            "return_url" => url('qp/deposit/gatewayResponse'),
-            // "return_url" => 'https://sprint.zaffranpay.com/qp/deposit/gatewayResponse',
+            // "return_url" => url('qp/deposit/gatewayResponse'),
+            "return_url" => 'https://sprint.zaffranpay.com/qp/deposit/gatewayResponse',
         ]);
         $result = $response->json();
 
-        echo "<pre>"; print_r($result); die;
+        echo "<pre>"; print_r($result);
 
          // for Xprixo deposit charge START
         if(!empty($cleanAmount)){
@@ -152,7 +152,7 @@ class QorePaymentController extends Controller
         }
         // for Xprixo deposit charge END
 
-        if ( isset($result)  &&  $result['status'] == 'APPROVED' ) {
+        if ( isset($result)  &&  $result['result']['status'] == 'APPROVED' ) {
                 //Insert data into DB
                 $addRecord = [
                     'agent_id' => $res['merchantdata']['agent_id'],
@@ -166,7 +166,7 @@ class QorePaymentController extends Controller
                     'Currency' => $request->Currency,
                     'payment_channel' => $res['channel']['id'] ?? '',
                     'payment_method' => $res['gateway_account']['payment_method'] ?? 'QR Payment',
-                    'request_data' => json_encode($postData),
+                    'request_data' => json_encode($res),
                     'gateway_name' => $res['gateway_account']['gateway_name'],
                     'customer_name' => $request->customer_name,
                     'payin_arr' => json_encode($result),
@@ -174,6 +174,7 @@ class QorePaymentController extends Controller
                     'ip_address' => $client_ip,
                     'net_amount' => $net_amount ?? '',
                     'mdr_fee_amount' => $mdr_fee_amount ?? '',
+                    'payment_status' => $result['result']['status'],
                 ];
                 DepositTransaction::create($addRecord);
 
@@ -201,7 +202,7 @@ class QorePaymentController extends Controller
                 TransactionNotification::create($addNotificationRecord);
                 // Insert data in Notification table Code END
 
-                return redirect($result['value']);
+                return redirect($result['result']['redirect_url'].'/'.$frtransaction.'/'.$result['result']['status']);
         } else {
                 $addRecord = [
                     'agent_id' => $res['merchantdata']['agent_id'],
@@ -214,7 +215,7 @@ class QorePaymentController extends Controller
                     'Currency' => $request->Currency,
                     'payment_channel' => $res['channel']['id'] ?? '',
                     'payment_method' => $res['gateway_account']['payment_method'] ?? 'QR Payment',
-                    'request_data' => json_encode($postData),
+                    'request_data' => json_encode($res),
                     'gateway_name' => $res['gateway_account']['gateway_name'],
                     'customer_name' => $request->customer_name ?? $request->bank_account_name,
                     // 'customer_email' => $request->customer_email,
@@ -246,21 +247,42 @@ class QorePaymentController extends Controller
         });
     }
 
-    public function qpDepositGatewayResponse(Request $request)
+    public function qpDepositGatewayResponse(Request $request, $frtransaction = null, $status = null)
     {
-            $response = $request->all();
-            $systemgenerated_TransId = $response['reference'] ?? null;
-            $gateway_TransId = $response['key'] ?? null;
+            // $response = $request->all();
+            $systemgenerated_TransId = $frtransaction;
+            $orderstatus = strtoupper($status); 
+          
         
-            $orderstatus = match ($response['status'] ?? null) {
-                'Active' => 'success',
-                'Pending' => 'pending',
-                default => 'failed',
-            };
+            // $orderstatus = match ($response['status'] ?? null) {
+            //     'Active' => 'success',
+            //     'Pending' => 'pending',
+            //     default => 'failed',
+            // };
+
+             // Map gateway status to your internal payment status
+                switch ($orderstatus) {
+                    case 'APPROVED':
+                    case 'SUCCESS':
+                    case 'ACTIVE':
+                        $paymentStatus = 'success';
+                        break;
+
+                    case 'PENDING':
+                        $paymentStatus = 'pending';
+                        break;
+
+                    case 'INVALID':
+                    case 'DECLINED':
+                    case 'FAILED':
+                    case 'FAIL':
+                    default:
+                        $paymentStatus = 'failed';
+                        break;
+                }
      
                 $updateData = [
-                    'gateway_TransId' => $gateway_TransId,
-                    'payment_status' => $orderstatus,
+                    'payment_status' => $paymentStatus,
                     'payin_arr' => json_encode($response)
                 ];
                 DepositTransaction::where('systemgenerated_TransId', $systemgenerated_TransId)->update($updateData);
