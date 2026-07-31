@@ -136,8 +136,8 @@ class QorePaymentController extends Controller
                 "language" => "en-US",
             ],
             "metadata" => (object) [],
-            // "return_url" => url('qp/deposit/gatewayResponse'),
-            "return_url" => 'https://sprint.zaffranpay.com/qp/deposit/gatewayResponse',
+            "return_url" => url('qp/deposit/gatewayResponse'),
+            // "return_url" => 'https://sprint.zaffranpay.com/qp/deposit/gatewayResponse',
         ]);
         $result = $response->json();
 
@@ -333,6 +333,24 @@ class QorePaymentController extends Controller
                 ];
                 return view('payment.payment_status', compact('request', 'postData', 'callbackUrl'));
             
+    }
+
+     // COMMON PART START
+    public function qoreDepositResponse(Request $request)
+    {
+        $data = $request->all();
+        // echo "Transaction Information as follows" . '<br/>' .
+        //     "Merchant_code : " . $data['merchant_code'] . '<br/>' .
+        //     "ReferenceId : " . $data['referenceId'] . '<br/>' .
+        //     "TransactionId : " . $data['transaction_id'] . '<br/>' .
+        //     "Type : Deposit" .'<br/>' .
+        //     "Currency : " . $data['Currency'] . '<br/>' .
+        //     "Amount : " . $data['amount'] . '<br/>' .
+        //     "customer_name : " . $data['customer_name'] . '<br/>' .
+        //     "Datetime : " . $data['created_at'] . '<br/>' .
+        //     "Status : " . $data['payment_status'];
+        
+        return view('payment-form.r2p.deposit-response-page', compact('data'));
     }
     
 }

@@ -53,7 +53,7 @@
                                     <form role="form" action="{{ route('apiroute.CardDepositApi') }}" method="GET" id="paymentForm" class="parsley-examples" data-parsley-validate novalidate>
                                     @csrf
                                         <input type="hidden" name="merchant_code" value="testmerchant005">
-                                        <input type="hidden" name="channel_id" value="7">   {{-- // for local 3 , for live 5 --}}
+                                        <input type="hidden" name="channel_id" value="8">   {{-- // for local 7 , for live 8 --}}
                                         <input type="hidden" name="callback_url" value="{{ route('apiroute.DepositResponse') }}">
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-md-4 col-form-label"><strong>Reference ID</strong><span class="text-danger">*</span></label>
