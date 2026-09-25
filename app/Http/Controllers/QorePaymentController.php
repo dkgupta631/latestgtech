@@ -141,7 +141,7 @@ class QorePaymentController extends Controller
         ]);
         $result = $response->json();
 
-        // echo "<pre>"; print_r($result);
+        // echo "<pre>"; print_r($result); exit;
 
          // for Xprixo deposit charge START
         if(!empty($cleanAmount)){
@@ -152,7 +152,7 @@ class QorePaymentController extends Controller
         }
         // for Xprixo deposit charge END
 
-        if ( isset($result)  &&  $result['result']['status'] == 'APPROVED' ) {
+        if ( isset($result['result']['status'])  &&  $result['result']['status'] == 'APPROVED' ) {
                 //Insert data into DB
                 $addRecord = [
                     'agent_id' => $res['merchantdata']['agent_id'],
@@ -225,7 +225,7 @@ class QorePaymentController extends Controller
                     'gateway_name' => $res['gateway_account']['gateway_name'],
                     'customer_name' => $request->card_holder_name,
                     'payin_arr' => json_encode($result),
-                    'receipt_url' => $result['result']['errors'][0]['message'] ?? '',
+                    'receipt_url' => $result['result']['errors'][0]['message'] ?? $result['message'],
                     'ip_address' => $client_ip,
                     'net_amount' => $net_amount ?? '',
                     'mdr_fee_amount' => $mdr_fee_amount ?? '',
@@ -233,12 +233,25 @@ class QorePaymentController extends Controller
                 ];
                 DepositTransaction::create($addRecord);
                 // echo "Unexpected Response"; echo "<pre>"; print_r($result['result']['errors']); die;
-                return redirect()->to(
-                                        $result['result']['redirect_url'] . '?' . http_build_query([
-                                            'frtransaction' => $frtransaction,                 // systemgenerated_TransId
-                                            'status'    => $result['result']['status'],    // APPROVED/INVALID/DECLINED etc.
-                                        ])
-                                    );
+                if (!empty($result['result']['redirect_url'])) {
+
+                    return redirect()->to(
+                        $result['result']['redirect_url'] . '?' . http_build_query([
+                            'frtransaction' => $frtransaction,
+                            'status' => $result['result']['status'] ?? 'failed',
+                        ])
+                    );
+
+                } else {
+
+                    return redirect()->to(
+                        url('qp/deposit/gatewayResponse') . '?' . http_build_query([
+                            'frtransaction' => $frtransaction,
+                            'status' => $result['result']['status'] ?? 'failed',
+                            'message' => $result['message'] ?? 'Payment gateway error',
+                        ])
+                    );
+                }
 
         }
 
