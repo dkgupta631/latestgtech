@@ -23,7 +23,7 @@
                 <!-- item-->
                 <a href="{{ route('change.lang', ['lang' => 'th']) }}" class="dropdown-item notify-item" id="th">
                     <img src="{{ URL::to('newassets/images/flags/th.png') }}" alt="lang-image" class="mr-1" height="12"> 
-                    <span class="align-middle">Thai</span>
+                    <span class="align-middle">ThaiT</span>
                 </a>
             </div>
         </li>
