@@ -94,12 +94,6 @@
                                 <li><a href="{{ route('withdrawal.summaryReport') }}" data-toggle="tooltip" data-placement="right" title="{{ __('messages.Withdrawal Report') }}">{{ __('messages.Withdrawal Report') }}</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="{{ route('user.profile') }}" data-toggle="tooltip" data-placement="right" title="{{ __('messages.Profile') }}">
-                                <i class="mdi mdi-account-outline"></i>
-                                <span> {{ __('messages.Profile') }} </span>
-                            </a>
-                        </li>
                          @if (Session::get('auth')->role_name === 'Admin')
                            <li>
                                 <a href="{{ route('user.list') }}" data-toggle="tooltip" data-placement="right" title="{{ __('messages.All User') }}">
@@ -108,13 +102,7 @@
                                 </a>
                             </li>
                         @endif
-                        <li>
-                                <a href="{{ route('api.documentation') }}" data-toggle="tooltip" data-placement="right" title="{{ __('messages.Api Documentation') }}">
-                                    <i class="mdi mdi-file-document-outline"></i>
-                                    <span> {{ __('messages.Api Documentation') }} </span>
-                                </a>
-                            </li>
-                        <li>
+                        <li class="mm-logout">
                             <a href="#" wire:click="logout" data-toggle="tooltip" data-placement="right" title="{{ __('messages.Logout') }}">
                                 <i class="mdi mdi-logout-variant"></i>
                                 <span> {{ __('messages.Logout') }} </span>

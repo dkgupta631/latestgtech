@@ -6,6 +6,7 @@ use App\Models\DepositTransaction;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Session;
+use App\Support\DateRangeFilter;
 
 class DepositTransactionsExport implements FromView
 {
@@ -35,37 +36,7 @@ class DepositTransactionsExport implements FromView
         }
 
         // Date filter
-        if ($this->dateFilter) {
-            switch ($this->dateFilter) {
-                case 'today':
-                    $query->whereDate('created_at', now());
-                    break;
-                case 'yesterday':
-                    $query->whereDate('created_at', now()->subDay());
-                    break;
-                case '7days':
-                    $query->whereDate('created_at', '>=', now()->subDays(7));
-                    break;
-                case 'this_week':
-                    $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
-                    break;
-                case 'last_week':
-                    $query->whereBetween('created_at', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()]);
-                    break;
-                case 'this_month':
-                    $query->whereMonth('created_at', now()->month);
-                    break;
-                case 'last_month':
-                    $query->whereMonth('created_at', now()->subMonth()->month);
-                    break;
-                case 'this_year':
-                    $query->whereYear('created_at', now()->year);
-                    break;
-                case 'last_year':
-                    $query->whereYear('created_at', now()->subYear()->year);
-                    break;
-            }
-        }
+        DateRangeFilter::apply($query, $this->dateFilter);
 
         // Search filter
         if (!empty($this->search)) {

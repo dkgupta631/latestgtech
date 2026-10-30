@@ -40,49 +40,51 @@
                             </a>
                         </div>
                     </div>
-                    <table  class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                        <thead>
-                        <tr>
-                            <th>{{ __('messages.Order Id') }}</th>
-                            <th>{{ __('messages.Gateway Account') }}</th>     
-                            <th>{{ __('messages.Payment Method') }} </th>
-                            <th>{{ __('messages.URL') }} </th>
-                            <th>{{ __('messages.Created Time') }}</th>
-                            <th>{{ __('messages.Status') }}</th>
-                            <th>{{ __('messages.Action') }}</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                             @forelse ($gateways as $index => $row)
-                                <tr wire:key="row-{{ $row->id }}">
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ ucfirst($row->gateway_name) ?? '' }}</td>
-                                    <td>{{ ucfirst($row->payment_method) ?? '' }}</td>
-                                    <td>{{ $row->website_url ?? '' }}</td>
-                                    <td> {{ $row->created_at ? $row->created_at->format('d-m-Y h:i:s A') : '' }}</td>
-                                    <td>
-                                        <label class="switch">
-                                            <input type="checkbox" wire:click="toggleStatus({{ $row->id }})" {{ $row->status ? 'checked' : '' }}>
-                                            <span class="slider"></span>
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-primary" wire:key="edit-{{ $row->id }}" wire:click.prevent="editConfirmationFun({{ $row->id }})">
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                        <button class="btn btn-danger waves-effect waves-light" wire:key="delete-{{ $row->id }}" wire:click.prevent="deleteConfirmationFun({{ $row->id }})">
-                                            <i class="fa fa-trash" aria-hidden="true"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td></td><td></td><td></td><td>{{ __('messages.Record not found') }}!</td><td></td><td></td></td><td>
-                                </tr>
-                            @endforelse
+                    <div class="table-responsive mm-table-scroll">
+                        <table  class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <thead>
+                            <tr>
+                                <th>{{ __('messages.Order Id') }}</th>
+                                <th>{{ __('messages.Gateway Account') }}</th>     
+                                <th>{{ __('messages.Payment Method') }} </th>
+                                <th>{{ __('messages.URL') }} </th>
+                                <th>{{ __('messages.Created Time') }}</th>
+                                <th>{{ __('messages.Status') }}</th>
+                                <th>{{ __('messages.Action') }}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                 @forelse ($gateways as $index => $row)
+                                    <tr wire:key="row-{{ $row->id }}">
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ ucfirst($row->gateway_name) ?? '' }}</td>
+                                        <td>{{ ucfirst($row->payment_method) ?? '' }}</td>
+                                        <td class="mm-wrap-any">{{ $row->website_url ?? '' }}</td>
+                                        <td> {{ $row->created_at ? strtoupper($row->created_at->format('dMY')) : '' }}</td>
+                                        <td>
+                                            <label class="switch">
+                                                <input type="checkbox" wire:click="toggleStatus({{ $row->id }})" {{ $row->status ? 'checked' : '' }}>
+                                                <span class="slider"></span>
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-primary" wire:key="edit-{{ $row->id }}" wire:click.prevent="editConfirmationFun({{ $row->id }})">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                            <button class="btn btn-danger waves-effect waves-light" wire:key="delete-{{ $row->id }}" wire:click.prevent="deleteConfirmationFun({{ $row->id }})">
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td></td><td></td><td></td><td>{{ __('messages.Record not found') }}!</td><td></td><td></td></td><td>
+                                    </tr>
+                                @endforelse
                         
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                     <!-- Pagination -->
                         <div class="mt-3">
                             <span class="h5">{{ $gateways->links() }}</span>

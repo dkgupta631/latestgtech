@@ -51,7 +51,6 @@ class DepositCreated implements ShouldBroadcast
 
     public function broadcastWith(): array
     {
-          dd($this->post);
         // Use the data passed from controller
         return  $this->post;
         

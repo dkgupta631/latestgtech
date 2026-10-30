@@ -7,7 +7,8 @@ import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
-window.Echo = new Echo({
+// only connect when Pusher keys are configured (VITE_PUSHER_APP_KEY in .env)
+if (import.meta.env.VITE_PUSHER_APP_KEY) window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,

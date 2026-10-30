@@ -87,7 +87,7 @@
 
         <div class="d-flex justify-content-between align-items-center mt-2">
             <div class="text-muted small">
-                Showing {{ $records->firstItem() }}–{{ $records->lastItem() }} of {{ $records->total() }}
+                {{ __('messages.Showing :from–:to of :total', ['from' => $records->firstItem(), 'to' => $records->lastItem(), 'total' => $records->total()]) }}
             </div>
             <div>
                 {{ $records->links() }}

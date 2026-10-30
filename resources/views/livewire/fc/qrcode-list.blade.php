@@ -19,100 +19,157 @@
           <div class="row">
                             <div class="col-12">
                                 <div class="card-box">
-                                    <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                                        <thead>
-                                        <tr>
-                                            <th>{{ __('messages.Order Id') }}</th>
-                                             <th>{{ __('messages.Invoice Number') }}</th>     {{-- For FC Department --}}
-                                            <th>{{ __('messages.Customer Name') }} </th>
-                                            <th>{{ __('messages.Amount') }} </th>
-                                            <th>{{ __('messages.Created Time') }}</th>
-                                            <th>{{ __('messages.QR Code') }} </th>
-                                            <th>{{ __('messages.Action') }}</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php $index = 0; @endphp
-                                            @forelse($record as $row)
-                                        <tr>
-                                            <td>{{ ++$index }}</td>
-                                            <td>{{ $row->invoice_number ?? '' }}</td>
-                                            <td>{{ $row->customer_name ?? '' }}</td>
-                                            <td>{{ $row->amount ?? '' }}</td>
-                                            <td> {{ $row->created_at ? $row->created_at->format('d-m-Y h:i:s A') : '' }}</td>
-                                            <td> <!-- Display QR Code as SVG -->{!! QrCode::size(100)->generate($row->qr_img_url) !!}</td>
-                                            <td>
-                                                <a href="#custom-modal" class="view-record-btn btn btn-primary waves-effect waves-light" data-id="{{ $row->id }}" data-animation="blur" data-plugin="custommodal"
-                                                data-overlaySpeed="100" data-overlayColor="#36404a">{{ __('messages.View') }}</a>
-                                            </td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td></td><td></td><td></td><td></td><td>{{ __('messages.Record not found') }}!</td><td></td><td></td></td><td></td><td></td><td></td><td>
-                                        </tr>
-                                        @endforelse
+                                    <div class="table-responsive mm-table-scroll">
+                                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                            <thead>
+                                            <tr>
+                                                <th>{{ __('messages.Order Id') }}</th>
+                                                 <th>{{ __('messages.Invoice Number') }}</th>     {{-- For FC Department --}}
+                                                <th>{{ __('messages.Customer Name') }} </th>
+                                                <th>{{ __('messages.Amount') }} </th>
+                                                <th>{{ __('messages.Created Time') }}</th>
+                                                <th>{{ __('messages.QR Code') }} </th>
+                                                <th>{{ __('messages.Action') }}</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php $index = 0; @endphp
+                                                @forelse($record as $row)
+                                            <tr>
+                                                <td>{{ ++$index }}</td>
+                                                <td>{{ $row->invoice_number ?? '' }}</td>
+                                                <td>{{ $row->customer_name ?? '' }}</td>
+                                                <td>{{ $row->amount ?? '' }}</td>
+                                                <td> {{ $row->created_at ? strtoupper($row->created_at->format('dMY')) : '' }}</td>
+                                                <td> <!-- Display QR Code as SVG -->{!! QrCode::size(100)->generate($row->qr_img_url) !!}</td>
+                                                <td>
+                                                    <a href="#custom-modal" class="view-record-btn btn btn-primary waves-effect waves-light" data-id="{{ $row->id }}" data-animation="blur" data-plugin="custommodal"
+                                                    data-overlaySpeed="100" data-overlayColor="#36404a">{{ __('messages.View') }}</a>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                <td></td><td></td><td></td><td></td><td>{{ __('messages.Record not found') }}!</td><td></td><td></td></td><td></td><td></td><td></td><td>
+                                            </tr>
+                                            @endforelse
                                         
-                                        </tbody>
-                                    </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                   
                                 </div>
                             </div>
                         </div>
                         <!-- end row -->
 <!-- Modal START-->
-    <div id="custom-modal" class="modal-demo">
-        <button type="button" class="close" onclick="Custombox.modal.close();">
-            <span>&times;</span><span class="sr-only">Close</span>
-        </button>
-        <h4 class="custom-modal-title text-center">{{ __('messages.View') }}</h4>
-        <div class="custom-modal-text text-muted">
-            <table class="table table-bordered test" style="padding: 7px 10px; !important">
-                    <tr>
-                        <td style="width: 25%; background-color: #6c6c70 !important; color: white;">{{ __('messages.Customer Name') }}</td>
-                        <td class="customer_name"></td>
-                        <td style="width: 25%;"  colspan="2" rowspan="4">
-                            {{-- {!! QrCode::size(200)->generate("<span>class='qr-content'</span>") !!} --}}
-                            <div id="qr-container"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="width: 25%; background-color: #6c6c70 !important; color: white;">{{ __('messages.Invoice Number') }}</td>
-                        <td class="invoice_number"></td>
-                    </tr>
-                    <tr>
-                        <td style="width: 25%; background-color: #6c6c70 !important; color: white;">{{ __('messages.Amount') }}</td>
-                        <td class="amount"></td>
-                    </tr>
-            </table>
+    <div id="custom-modal" class="modal-demo mm-qr-modal">
+        <div class="mm-qrm-head">
+            <div class="mm-qrm-title">
+                <span class="mm-qrm-title-icon"><i class="mdi mdi-qrcode"></i></span>
+                <div>
+                    <b>{{ __('messages.Payment QR Code') }}</b>
+                    <small>{{ __('messages.Scan to pay this invoice') }}</small>
+                </div>
+            </div>
+            <button type="button" class="mm-qrm-close" onclick="Custombox.modal.close();" aria-label="{{ __('messages.Close') }}">
+                <i class="mdi mdi-close"></i>
+            </button>
+        </div>
+
+        <div class="mm-qrm-body">
+            <div class="mm-qrm-qr">
+                <div class="mm-qrm-qr-frame">
+                    <div id="qr-container"></div>
+                    <div class="mm-qrm-loading" id="qr-loading"><span class="mm-spin mm-spin-blue"></span></div>
+                </div>
+                <span class="mm-qrm-scan"><i class="mdi mdi-cellphone-screenshot"></i> {{ __('messages.Point the camera at the code') }}</span>
+            </div>
+
+            <div class="mm-qrm-info">
+                <small class="mm-qrm-label">{{ __('messages.Amount to pay') }}</small>
+                <div class="mm-qrm-amount"><span class="amount">—</span></div>
+
+                <dl class="mm-qrm-details">
+                    <div><dt><i class="mdi mdi-account-outline"></i> {{ __('messages.Customer Name') }}</dt><dd class="customer_name">—</dd></div>
+                    <div><dt><i class="mdi mdi-file-document-outline"></i> {{ __('messages.Invoice Number') }}</dt><dd class="invoice_number">—</dd></div>
+                    <div><dt><i class="mdi mdi-calendar-clock"></i> {{ __('messages.Created') }}</dt><dd class="created_at">—</dd></div>
+                </dl>
+
+                <div class="mm-qrm-link">
+                    <input type="text" class="form-control" id="qr-link" readonly aria-label="{{ __('messages.Payment link') }}">
+                    <button type="button" class="btn btn-secondary" id="qr-copy"><i class="mdi mdi-content-copy"></i> {{ __('messages.Copy') }}</button>
+                </div>
+
+                <div class="mm-qrm-actions">
+                    <button type="button" class="btn btn-success" id="qr-download"><i class="mdi mdi-download"></i> {{ __('messages.Download QR') }}</button>
+                    <a href="#" class="btn btn-outline-primary" id="qr-open" target="_blank" rel="noopener"><i class="mdi mdi-open-in-new"></i> {{ __('messages.Open Link') }}</a>
+                </div>
+            </div>
         </div>
     </div>
-<!-- Modal START-->
+<!-- Modal END-->
 <script>
 $(document).ready(function() {
+    var current = null;
+
     $('.view-record-btn').click(function() {
         let recordId = $(this).data('id');
-        // alert(recordId);
+        $('#qr-container').empty();
+        $('#qr-loading').show();
+        $('.customer_name, .invoice_number, .created_at, .amount').text('—');
+        $('#qr-link').val('');
+
         $.ajax({
             url: '/get-record/' + recordId,
             type: 'GET',
             success: function(response) {
-                $('.customer_name').html(response.customer_name);
-                $('.invoice_number').html(response.invoice_number);
-                $('.amount').html(response.amount);
-                // $('.qr-content').html(response.qr_img_url);
-             
+                current = response;
+                // .text() so stored values are never rendered as HTML
+                $('.customer_name').text(response.customer_name || '—');
+                $('.invoice_number').text(response.invoice_number || '—');
+                var amount = parseFloat(response.amount);
+                $('.amount').text(isNaN(amount) ? (response.amount || '—') : amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                $('.created_at').text(response.created_at ? new Date(response.created_at).toLocaleString(@json(app()->getLocale() === 'th' ? 'th-TH' : 'en-GB'), { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—');
+                $('#qr-link').val(response.qr_img_url || '');
+                $('#qr-open').attr('href', response.qr_img_url || '#');
+
+                $('#qr-loading').hide();
+                // the popup restores its previous content when reopened, so clear right before drawing
                 $('#qr-container').empty();
-                // Generate new QR code with value of response.qr_img_url
-                new QRCode(document.getElementById("qr-container"), {
+                new QRCode(document.getElementById('qr-container'), {
                     text: response.qr_img_url,
-                    width: 200,
-                    height: 150
+                    width: 220,
+                    height: 220,
+                    correctLevel: QRCode.CorrectLevel.M
                 });
             },
             error: function() {
-                alert('Failed to fetch record.');
+                $('#qr-loading').hide();
+                toastr.error(@json(__('messages.Failed to fetch record.')));
             }
         });
+    });
+
+    $('#qr-copy').on('click', function() {
+        var btn = $(this), link = $('#qr-link').val();
+        if (!link) return;
+        (navigator.clipboard ? navigator.clipboard.writeText(link) : Promise.reject()).catch(function () {
+            $('#qr-link').trigger('select'); document.execCommand('copy');
+        }).finally(function () {
+            btn.html('<i class="mdi mdi-check"></i> ' + @json(__('messages.Copied')));
+            setTimeout(function () { btn.html('<i class="mdi mdi-content-copy"></i> ' + @json(__('messages.Copy'))); }, 1500);
+        });
+    });
+
+    $('#qr-download').on('click', function() {
+        var canvas = document.querySelector('#qr-container canvas');
+        var img = document.querySelector('#qr-container img');
+        var src = canvas ? canvas.toDataURL('image/png') : (img && img.src);
+        if (!src) return;
+        var a = document.createElement('a');
+        a.href = src;
+        a.download = 'QR-' + ((current && current.invoice_number) || 'payment').replace(/[^a-z0-9_-]+/gi, '_') + '.png';
+        document.body.appendChild(a); a.click(); a.remove();
     });
 });
 </script>

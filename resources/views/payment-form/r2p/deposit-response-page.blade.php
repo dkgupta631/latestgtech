@@ -44,17 +44,17 @@
     <title>{{ $state['label'] }}</title>
     <style>
         :root {
-            --brand: #64b0f2;
-            --brand-dark: #2f86d6;
+            --brand: #1e3d6e;
+            --brand-dark: #1e3d6e;
             --text: #1f2d3d;
             --muted: #6b7a8c;
-            --line: #e6edf5;
+            --line: #ebe8e1;
             --success: #1e9e5a;
             --success-bg: #e8f7ef;
             --pending: #e69500;
             --pending-bg: #fff5e0;
             --processing: #2f86d6;
-            --processing-bg: #e8f2fc;
+            --processing-bg: #e8eef8;
             --failed: #e53935;
             --failed-bg: #fdecec;
         }
@@ -62,7 +62,7 @@
         body {
             margin: 0;
             min-height: 100vh;
-            background: var(--brand);
+            background: #eef1f6;
             font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
             color: var(--text);
             display: flex;
@@ -75,10 +75,10 @@
             max-width: 480px;
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 12px 40px rgba(16, 56, 99, .18);
+            box-shadow: 0 10px 30px rgba(30, 61, 110, .12);
             overflow: hidden;
         }
-        .receipt-top { height: 6px; background: var(--accent); }
+        .receipt-top { height: 6px; background: linear-gradient(90deg, #1e3d6e 0%, #1e3d6e 70%, #d6a630 70%, #f1cf6b 100%); }
         .head { text-align: center; padding: 32px 28px 24px; }
         .icon {
             width: 76px; height: 76px; margin: 0 auto 16px;
@@ -113,11 +113,11 @@
             flex: 1; padding: 12px; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; text-align: center;
             border: 2px solid var(--brand); background: #fff; color: var(--brand-dark);
         }
-        .btn-primary { background: var(--brand); color: #fff; }
+        .btn-primary { background: linear-gradient(135deg, #2a5296, #1e3d6e); color: #fff; }
         .btn:hover { filter: brightness(.96); }
         .foot {
             display: flex; align-items: center; justify-content: center; gap: 6px;
-            padding: 14px; background: #f6f9fc; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line);
+            padding: 14px; background: #faf9f6; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line);
         }
         .foot svg { width: 14px; height: 14px; stroke: var(--muted); }
         .state-success { --accent: var(--success); --accent-bg: var(--success-bg); }

@@ -1,8 +1,10 @@
 <?php
 namespace App\Livewire;
 use Livewire\Component;
+use Livewire\Attributes\Session as KeepInSession;
 use App\Models\WithdrawTransaction;
 use Session;
+use App\Support\DateRangeFilter;
 
 use App\Exports\WithdrawTransactionExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -11,13 +13,15 @@ class WithdrawTransactionList extends Component
 {
 
     public $transactionlist, $totalAmount, $totalmdrfee, $totalNetAmount;
+    // remembered per page in the session, so a refresh keeps the selected filters
+    #[KeepInSession]
     public $statusFilter = 'all';
+    #[KeepInSession]
     public $dateFilter = 'today';
     public $search = '';
 
     public function mount()
     {
-        $this->calculateTotals(); // calculate once for $totalAmount, $totalmdrfee, $totalNetAmount;
         $this->getTransactions();
     }
 
@@ -27,22 +31,6 @@ class WithdrawTransactionList extends Component
             new WithdrawTransactionExport($this->statusFilter, $this->dateFilter, $this->search),
             'Withdraw_transactions.xlsx'
         );
-    }
-
-    public function calculateTotals()
-    {
-        $query = WithdrawTransaction::query()
-            ->where('status', 'success');
-
-        if (Session::get('auth')->role_name === 'Merchant') {
-            $query->where('merchant_id', Session::get('auth')->merchant_id);
-        } elseif (Session::get('auth')->role_name === 'Agent') {
-            $query->where('agent_id', Session::get('auth')->agent_id);
-        }
-
-        $this->totalAmount = $query->sum('total');
-        $this->totalmdrfee = $query->sum('mdr_fee_amount');
-        $this->totalNetAmount = $query->sum('net_amount');
     }
 
     public function updated($propertyName)
@@ -69,37 +57,7 @@ class WithdrawTransactionList extends Component
         }
 
         // Date filter
-        if ($this->dateFilter) {
-            switch ($this->dateFilter) {
-                case 'today':
-                    $query->whereDate('created_at', now());
-                    break;
-                case 'yesterday':
-                    $query->whereDate('created_at', now()->subDay());
-                    break;
-                case '7days':
-                    $query->whereDate('created_at', '>=', now()->subDays(7));
-                    break;
-                case 'this_week':
-                    $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()]);
-                    break;
-                case 'last_week':
-                    $query->whereBetween('created_at', [now()->subWeek()->startOfWeek(), now()->subWeek()->endOfWeek()]);
-                    break;
-                case 'this_month':
-                    $query->whereMonth('created_at', now()->month);
-                    break;
-                case 'last_month':
-                    $query->whereMonth('created_at', now()->subMonth()->month);
-                    break;
-                case 'this_year':
-                    $query->whereYear('created_at', now()->year);
-                    break;
-                case 'last_year':
-                    $query->whereYear('created_at', now()->subYear()->year);
-                    break;
-            }
-        }
+        DateRangeFilter::apply($query, $this->dateFilter);
 
         // Search filter
         if (!empty($this->search)) {
@@ -111,13 +69,14 @@ class WithdrawTransactionList extends Component
             });
         }
 
+        // Totals = successful transactions within the current filters
+        $success = (clone $query)->where('status', 'success');
+        $this->totalAmount = (clone $success)->sum('total');
+        $this->totalmdrfee = (clone $success)->sum('mdr_fee_amount');
+        $this->totalNetAmount = (clone $success)->sum('net_amount');
+
         $this->transactionlist = $query->orderByDesc('id')->get();
 
-        // Totals
-        // $successQuery = (clone $query)->where('status', 'success');
-        // $this->totalAmount = $successQuery->sum('amount');
-        // $this->totalmdrfee = $successQuery->sum('mdr_fee_amount');
-        // $this->totalNetAmount = $successQuery->sum('net_amount');
     }
 
 
