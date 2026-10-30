@@ -5,6 +5,7 @@ use App\Http\Controllers\RichPayController;
 use App\Http\Controllers\IpintPaymentController;
 use App\Http\Controllers\XprizoPaymentController;
 use App\Http\Controllers\QorePaymentController;
+use App\Http\Controllers\AcledaPaymentController;
 
 
 Route::get('/user', function (Request $request) {
@@ -44,5 +45,12 @@ Route::controller(QorePaymentController::class)->group(function () {
     Route::get('qp/deposit/', 'qoreDepositApifun')->name('apiroute.CardDepositApi');
     Route::post('qp/depositResponse', 'qoreDepositResponse')->name('apiroute.DepositResponse'); 
     Route::post('/qpWebhookNotifiication', 'qoreWebhookNotifiication');
+  
+});
+
+Route::controller(AcledaPaymentController::class)->group(function () {
+    Route::get('acleda/deposit/', 'acledaDepositApifun')->name('apiroute.AcledaDepositApi');
+    Route::post('acleda/depositResponse', 'acledaDepositResponse')->name('apiroute.AcledaDepositResponse'); 
+    Route::post('/acledaWebhookNotifiication', 'acledaWebhookNotifiication');
   
 });

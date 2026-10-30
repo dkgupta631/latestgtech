@@ -9,6 +9,7 @@ use App\Http\Controllers\RichPayController;
 use App\Http\Controllers\IpintPaymentController;
 use App\Http\Controllers\XprizoPaymentController;
 use App\Http\Controllers\QorePaymentController;
+use App\Http\Controllers\AcledaPaymentController;
 
 use App\Livewire\Auth\LoginPage;
 use App\Livewire\DashboardPage;
@@ -130,6 +131,21 @@ Route::controller(QorePaymentController::class)->group(function () {
 Route::get('/qp/cardDepositTest', function () {
     return view('payment-form.qore.cardDeposittest');
 });
+
+
+Route::controller(AcledaPaymentController::class)->group(function () {
+    Route::get('/acledaPay', 'AcDepositform');            // Card Deposit form 
+    Route::get('acleda/deposit/checkout/{frtransaction}', 'AcDepositCheckout');       // auto-post to ACLEDA payment page
+    Route::get('acleda/deposit/gatewayResponse/{frtransaction}', 'AcDepositGatewayResponse');       // for gateway response
+   
+});
+Route::get('/acleda/DepositTest', function () {
+    return view('payment-form.acleda.Deposittest');
+});
+
+
+
+
 
 
 Route::get('/pusher', function () {
