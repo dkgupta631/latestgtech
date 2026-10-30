@@ -4,6 +4,7 @@ use Livewire\Component;
 use App\Models\Agent;
 use App\Models\Merchant;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Livewire\WithDispatchesEvents;
 use Livewire\WithPagination;
 use Session;
@@ -187,9 +188,17 @@ class MerchantList extends Component
     public function delete(){
       
          $data= User::find($this->record_id);
-         $merchantdata= Merchant::find($data->merchant_id);
-         $merchantdata->delete();
-         $data->delete();
+         if ($data) {
+             // remove the merchant, its gateway configurations and its login user together
+             DB::transaction(function () use ($data) {
+                 $merchantdata = Merchant::find($data->merchant_id);
+                 if ($merchantdata) {
+                     $merchantdata->gatewayConfigurations()->delete();
+                     $merchantdata->delete();
+                 }
+                 $data->delete();
+             });
+         }
          $this->getdata();
          $this->dispatch('recordDeleted');
     }

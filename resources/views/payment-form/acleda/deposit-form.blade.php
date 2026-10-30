@@ -12,12 +12,12 @@
     <title>Secure Checkout</title>
     <style>
         :root {
-            --brand: #64b0f2;
-            --brand-dark: #2f86d6;
+            --brand: #1e3d6e;
+            --brand-dark: #1e3d6e;
             --text: #1f2d3d;
             --muted: #6b7a8c;
-            --line: #e6edf5;
-            --field: #f6f9fc;
+            --line: #ebe8e1;
+            --field: #faf9f6;
             --danger: #e53935;
             --danger-bg: #fdecec;
         }
@@ -25,7 +25,7 @@
         body {
             margin: 0;
             min-height: 100vh;
-            background: var(--brand);
+            background: #eef1f6;
             font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
             color: var(--text);
             display: flex;
@@ -38,10 +38,10 @@
             max-width: 460px;
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 12px 40px rgba(16, 56, 99, .18);
+            box-shadow: 0 10px 30px rgba(30, 61, 110, .12);
             overflow: hidden;
         }
-        .card-top { height: 6px; background: var(--brand-dark); }
+        .card-top { height: 6px; background: linear-gradient(90deg, #1e3d6e 0%, #1e3d6e 70%, #d6a630 70%, #f1cf6b 100%); }
         .head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 28px 0; }
         .head h1 { margin: 0; font-size: 20px; font-weight: 800; }
         .head p { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
@@ -66,7 +66,7 @@
             border: 1.5px solid var(--line); border-radius: 8px; background: #fff;
             font: inherit; font-size: 15px; color: var(--text); outline: none; transition: border-color .15s, box-shadow .15s;
         }
-        .input:focus { border-color: var(--brand-dark); box-shadow: 0 0 0 3px rgba(47, 134, 214, .15); }
+        .input:focus { border-color: var(--brand-dark); box-shadow: 0 0 0 3px rgba(30, 61, 110, .15); }
         .input[readonly] { background: var(--field); color: var(--muted); }
         .row2 { display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px; }
         .methods { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -79,15 +79,15 @@
         .method .box svg { width: 22px; height: 22px; stroke: var(--muted); flex-shrink: 0; }
         .method .box b { display: block; font-size: 14px; }
         .method .box small { display: block; font-size: 11px; color: var(--muted); }
-        .method input:checked + .box { border-color: var(--brand-dark); background: #e8f2fc; }
+        .method input:checked + .box { border-color: var(--brand-dark); background: #e8eef8; }
         .method input:checked + .box svg { stroke: var(--brand-dark); }
-        .method input:focus-visible + .box { box-shadow: 0 0 0 3px rgba(47, 134, 214, .25); }
+        .method input:focus-visible + .box { box-shadow: 0 0 0 3px rgba(30, 61, 110, .25); }
         .error { margin-top: 6px; font-size: 13px; color: var(--danger); }
         .alert { margin: 18px 28px 0; padding: 12px 14px; border-radius: 8px; background: var(--danger-bg); color: var(--danger); font-size: 14px; }
         .btn {
             display: flex; align-items: center; justify-content: center; gap: 8px;
             width: 100%; margin-top: 24px; height: 50px; border: 0; border-radius: 8px;
-            background: var(--brand); color: #fff; font-size: 16px; font-weight: 800; cursor: pointer;
+            background: linear-gradient(135deg, #2a5296, #1e3d6e); color: #fff; font-size: 16px; font-weight: 800; cursor: pointer;
         }
         .btn:hover { filter: brightness(.96); }
         .btn:disabled { cursor: wait; opacity: .85; }
@@ -97,7 +97,7 @@
         .hint { margin: 10px 0 0; text-align: center; font-size: 12px; color: var(--muted); }
         .foot {
             display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap;
-            padding: 14px; background: #f6f9fc; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); text-align: center;
+            padding: 14px; background: #faf9f6; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); text-align: center;
         }
         .foot svg { width: 14px; height: 14px; stroke: var(--muted); }
         @media (max-width: 420px) {

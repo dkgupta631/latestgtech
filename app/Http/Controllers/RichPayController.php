@@ -7,6 +7,7 @@ use App\Models\GatewayChannel;
 use App\Models\GatewayChannelParameter;
 use App\Models\GatewayConfigurationMerchant;
 use App\Models\DepositTransaction;
+use App\Models\WithdrawTransaction;
 use App\Models\Merchant;
 use App\Events\DepositCreated;
 use App\Models\TransactionNotification;
@@ -386,6 +387,49 @@ class RichPayController extends Controller
                     'msg' => 'One Transaction notified!',
                 ];
                 TransactionNotification::create($addNotificationRecord);
+            // Insert data in Notification table Code END
+
+        return view('payment.depositNotification', compact('postData', 'callbackUrl'));
+    }
+
+    // Resend withdrawal callback to the merchant (same payload keys as the deposit callback)
+    public function sendWithdrawNotification($id)
+    {
+        $paymentDetail = WithdrawTransaction::where('id', base64_decode($id))->first();
+        abort_if(!$paymentDetail, 404, 'Transaction not found');
+        abort_if(empty($paymentDetail->callback_url), 422, 'No callback URL saved for this transaction');
+
+        $callbackUrl = $paymentDetail->callback_url;
+        $postData = [
+            'merchant_code' => $paymentDetail->merchant_code,
+            'referenceId' => $paymentDetail->reference_id,
+            'transaction_id' => $paymentDetail->systemgenerated_TransId,
+            'amount' => $paymentDetail->total,
+            'Currency' => $paymentDetail->Currency,
+            'customer_name' => $paymentDetail->customer_name,
+            'payment_status' => $paymentDetail->status,
+            'created_at' => $paymentDetail->created_at,
+        ];
+
+            // Broadcast the event Notification code START
+                $data = [
+                    'type' => 'Notification send Successfully!',
+                    'transaction_id' => $paymentDetail->systemgenerated_TransId,
+                    'amount' => $paymentDetail->total,
+                    'Currency' => $paymentDetail->Currency,
+                    'status' => $paymentDetail->status,
+                    'msg' => 'One Withdraw Transaction notified!',
+                ];
+                event(new DepositCreated($data));
+                // Broadcast the event Notification code END
+                // Insert data in Notification table Code START
+                TransactionNotification::create([
+                    'notifiable_type' => 'Notification send Successfully!',
+                    'agent_id' => $paymentDetail->agent_id,
+                    'merchant_id' => $paymentDetail->merchant_id,
+                    'data' => json_encode($data, true),
+                    'msg' => 'One Withdraw Transaction notified!',
+                ]);
             // Insert data in Notification table Code END
 
         return view('payment.depositNotification', compact('postData', 'callbackUrl'));

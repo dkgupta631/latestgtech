@@ -7,6 +7,7 @@ use App\Models\WithdrawTransaction;
 use App\Exports\WithdrawalReportExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Session;
+use App\Support\DateRangeFilter;
 
 class WithdrawalSummaryReport extends Component
 {
@@ -20,6 +21,7 @@ class WithdrawalSummaryReport extends Component
     public $totalAmount = 0;
     public $totalmdrfee = 0;
     public $totalNetAmount = 0;
+    public $totalCount = 0;   // transactions counted in the totals
 
     protected $queryString = ['statusFilter', 'search', 'startDate', 'endDate'];
 
@@ -36,6 +38,21 @@ class WithdrawalSummaryReport extends Component
     public function updated($propertyName)
     {
         if (in_array($propertyName, ['statusFilter', 'search', 'startDate', 'endDate'])) {
+            // keep the range valid when a date is picked out of order
+            if ($this->startDate && $this->endDate && $this->startDate > $this->endDate) {
+                [$this->startDate, $this->endDate] = [$this->endDate, $this->startDate];
+            }
+            $this->resetPage();
+            $this->calculateTotals();
+        }
+    }
+
+    // quick range chips: today, last 7 days, this month ...
+    public function setRange($preset)
+    {
+        if ($range = DateRangeFilter::range($preset)) {
+            $this->startDate = $range[0]->format('Y-m-d');
+            $this->endDate = $range[1]->format('Y-m-d');
             $this->resetPage();
             $this->calculateTotals();
         }
@@ -88,6 +105,7 @@ class WithdrawalSummaryReport extends Component
             });
         }
 
+        $this->totalCount = (clone $query)->count();
         $this->totalAmount = $query->sum('total');
         $this->totalmdrfee = $query->sum('mdr_fee_amount');
         $this->totalNetAmount = $query->sum('net_amount');

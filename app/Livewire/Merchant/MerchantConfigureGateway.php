@@ -100,8 +100,12 @@ class MerchantConfigureGateway extends Component
 
     public function getdata(){
         return GatewayConfigurationMerchant::query()
-            ->where('gateway_account_id', 'like', "%{$this->search}%")
-            ->orWhere('merchant_id', 'like', "%{$this->search}%")
+            ->with(['merchant', 'gatewayAccount'])
+            ->whereHas('merchant')      // skip configurations whose merchant no longer exists
+            ->where(function ($q) {
+                $q->where('gateway_account_id', 'like', "%{$this->search}%")
+                  ->orWhere('merchant_id', 'like', "%{$this->search}%");
+            })
             ->orderBy('id', 'desc')
             ->paginate($this->perPage);
     }

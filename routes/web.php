@@ -78,6 +78,7 @@ Route::controller(RichPayController::class)->group(function () {
     // Route::get('/r2p/payouttest', 'payouttest'); 
 
     Route::get('sendDepositNotification/{id}', 'sendDepositNotification');
+    Route::get('sendWithdrawNotification/{id}', 'sendWithdrawNotification');
 });
 
 // FOR GATEWAY CONFIGURATION START

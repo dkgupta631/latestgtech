@@ -7,7 +7,9 @@
         <meta content="{{ __('messages.International Payment Gateway System') }}" name="description" />
         <meta content="Coderthemes" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <!-- App favicon -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- App favicon -->
         <link rel="shortcut icon" href="{{ URL::to('newassets/images/favicon.ico') }}">
         <!-- App css -->
         <link href="{{ URL::to('newassets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" id="bootstrap-stylesheet" />
@@ -17,6 +19,7 @@
         <link href="{{ URL::to('newassets/libs/toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
          <!-- Toster CSS START Livewire-->
         <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+        <link href="{{ URL::to('newassets/css/mm-theme.css') }}" rel="stylesheet" type="text/css" />
         <!-- Toster CSS END Livewire-->
         @livewireStyles
     </head>

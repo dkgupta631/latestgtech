@@ -7,6 +7,8 @@
     <meta content="{{ __('messages.International Payment Gateway System') }}" name="description" />
     <meta content="Coderthemes" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ URL::to('newassets/images/favicon.ico') }}">
     <!-- App css -->
@@ -35,10 +37,12 @@
     <!-- Toster CSS END for Livewire and Laravel both-->
     <!-- Custom box css -->
     <link href="{{ URL::to('newassets/libs/custombox/custombox.min.css') }}" rel="stylesheet">
+        <link href="{{ URL::to('newassets/css/mm-theme.css') }}" rel="stylesheet" type="text/css" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @livewireStyles
+    @vite(['resources/js/app.js'])
 </head>
 
 <body>
@@ -64,12 +68,9 @@
 
                 <!-- Footer Start -->
                 <footer class="footer">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-md-12">
-                                2025 - 2026 &copy; {{ __('messages.powered by') }} <a href="https://zaffrantech.com/" target="_blank">ZaffranTech</a>
-                            </div>
-                        </div>
+                    <div class="mm-footer">
+                        <span>2025 - {{ date('Y') }} &copy; {{ __('messages.powered by') }} <a href="https://zaffrantech.com/" target="_blank" rel="noopener">ZaffranTech</a></span>
+                        <span class="mm-footer-secure"><i class="mdi mdi-shield-check"></i> {{ __('messages.Secure payment infrastructure') }}</span>
                     </div>
                 </footer>
                 <!-- end Footer -->
@@ -82,6 +83,26 @@
 
 
     @livewireScripts
+    @php
+        $mmI18n = [];
+        foreach (['Sound alerts on - click to mute', 'Sound alerts off - click to turn on', 'Click anywhere to enable sound alerts', 'Click anywhere on the page to enable sound alerts.', 'Sound is blocked by the browser', 'New transaction'] as $mmKey) {
+            $mmI18n[$mmKey] = __('messages.' . $mmKey);
+        }
+    @endphp
+    <script>
+        window.mmI18n = {!! json_encode($mmI18n, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) !!};
+    </script>
+    <script src="{{ URL::to('newassets/js/mm-alerts.js') }}"></script>
+
+    <script>
+        // mobile: tap outside the sidebar closes it
+        document.addEventListener('click', function (e) {
+            if (window.innerWidth < 992 && document.body.classList.contains('sidebar-enable')
+                && !e.target.closest('.left-side-menu, .button-menu-mobile')) {
+                document.body.classList.remove('sidebar-enable');
+            }
+        });
+    </script>
 
     <!-- Toster JS START For Livewire-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -144,6 +165,16 @@
         <script src="{{ URL::to('newassets/js/pages/sweet-alerts.init.js') }}"></script> --}}
 
     <!-- Datatables init -->
+    @if (app()->getLocale() === 'th')
+    <script>
+        $.extend(true, $.fn.dataTable.defaults, { language: {
+            search: 'ค้นหา:', lengthMenu: 'แสดง _MENU_ รายการ', info: 'แสดง _START_ ถึง _END_ จาก _TOTAL_ รายการ',
+            infoEmpty: 'แสดง 0 ถึง 0 จาก 0 รายการ', infoFiltered: '(กรองจาก _MAX_ รายการ)', zeroRecords: 'ไม่พบข้อมูล',
+            emptyTable: 'ไม่มีข้อมูล', paginate: { first: 'หน้าแรก', last: 'หน้าสุดท้าย', next: 'ถัดไป', previous: 'ก่อนหน้า' },
+            buttons: { copy: 'คัดลอก', excel: 'Excel', pdf: 'PDF', print: 'พิมพ์', copyTitle: 'คัดลอกแล้ว', copySuccess: { _: 'คัดลอก %d แถว', 1: 'คัดลอก 1 แถว' } }
+        } });
+    </script>
+    @endif
     <script src="{{ URL::to('newassets/js/pages/datatables.init.js') }}"></script>
 
     <!-- Toastr js -->

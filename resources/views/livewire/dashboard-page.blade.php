@@ -321,7 +321,7 @@
                                     <td style="width: 25%; background-color:#808080; border: 1px solid lightgray" class="header-title">{{ trans('messages.User Name') }}</td>
                                     <td style="width: 25%; color:#000; border: 1px solid lightgray" class="header-title">{{ Session::get('auth')->user_name ?? '' }}</td>
                                     <td style="width: 25%; background-color:#808080; border: 1px solid lightgray" class="header-title">{{ trans('messages.Created Date/Time') }}</td>
-                                    <td style="width: 25%; color:#000; border: 1px solid lightgray" class="header-title">{{ Session::get('auth')->created_at->format('Y-m-d H:i:s') ?? '' }}</td>
+                                    <td style="width: 25%; color:#000; border: 1px solid lightgray" class="header-title">{{ Session::get('auth')->created_at ? strtoupper(Session::get('auth')->created_at->format('dMY')) : '' }}</td>
                                 </tr>
                                 @if (Session::get('auth')->role_name == 'Merchant')
                                 <tr>
