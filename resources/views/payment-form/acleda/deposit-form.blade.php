@@ -105,6 +105,25 @@
             .total, .alert { margin-left: 18px; margin-right: 18px; }
             .row2, .methods { grid-template-columns: 1fr; }
         }
+        .pp-overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(238, 241, 246, .96); backdrop-filter: blur(4px); }
+        .pp-overlay[hidden] { display: none; }
+        .pp-box { width: 100%; max-width: 420px; background: #fff; border-radius: 16px; padding: 30px 28px; text-align: center; box-shadow: 0 14px 40px rgba(30, 61, 110, .16); border-top: 6px solid var(--brand); }
+        .pp-ring { width: 84px; height: 84px; margin: 0 auto 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 6px solid #e8eef8; border-top-color: var(--brand); animation: pp-spin 1s linear infinite; }
+        .pp-ring span { animation: pp-spin 1s linear infinite reverse; font-weight: 800; color: var(--brand); font-size: 17px; }
+        @keyframes pp-spin { to { transform: rotate(360deg); } }
+        .pp-box h2 { margin: 0 0 4px; font-size: 19px; }
+        .pp-amount { margin: 0 0 18px; font-size: 24px; font-weight: 800; color: var(--brand); }
+        .pp-steps { list-style: none; margin: 0 0 18px; padding: 0; text-align: left; display: grid; gap: 10px; }
+        .pp-steps li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #a0a6b1; transition: color .2s; }
+        .pp-steps li i { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #d6dbe4; flex-shrink: 0; position: relative; }
+        .pp-steps li.active { color: var(--text); font-weight: 700; }
+        .pp-steps li.active i { border-color: var(--brand); border-top-color: transparent; animation: pp-spin .8s linear infinite; }
+        .pp-steps li.done { color: #1e9e5a; }
+        .pp-steps li.done i { border-color: #1e9e5a; background: #1e9e5a; }
+        .pp-steps li.done i::after { content: ""; position: absolute; left: 5px; top: 2px; width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+        .pp-bar { height: 6px; border-radius: 6px; background: #e8eef8; overflow: hidden; margin-bottom: 12px; }
+        .pp-bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #1e3d6e, #2a5296 80%, #d6a630); transition: width .25s linear; }
+        .pp-box small { color: var(--muted); font-size: 12.5px; }
     </style>
 </head>
 <body>
@@ -193,6 +212,23 @@
         </footer>
     </main>
 
+    {{-- shown while the bank prepares the payment session (ACLEDA takes ~15-20s) --}}
+    <div class="pp-overlay" id="ppOverlay" hidden aria-live="polite">
+        <div class="pp-box">
+            <div class="pp-ring"><span id="ppPercent">0%</span></div>
+            <h2>Preparing your secure payment</h2>
+            <p class="pp-amount" id="ppAmount"></p>
+            <ul class="pp-steps">
+                <li data-at="0"><i></i> Verifying payment details</li>
+                <li data-at="2"><i></i> Connecting securely to the bank</li>
+                <li data-at="6"><i></i> Bank is creating your payment session</li>
+                <li data-at="16"><i></i> Opening the payment page</li>
+            </ul>
+            <div class="pp-bar"><span id="ppBar"></span></div>
+            <small id="ppTip">Please keep this page open. You will be redirected automatically.</small>
+        </div>
+    </div>
+
     <script>
         (function () {
             var symbols = { USD: '$', KHR: '៛' };
@@ -226,8 +262,28 @@
                 }
                 btn.disabled = true;
                 btn.innerHTML = '<span class="spin"></span><span>Opening secure session...</span>';
-                document.getElementById('hint').textContent = 'This can take up to 30 seconds. Please do not close this page.';
+                showProgress();
             });
+
+            // full-screen progress while the bank opens the session (eases towards 95%, never "finishes" early)
+            function showProgress() {
+                var ov = document.getElementById('ppOverlay'), bar = document.getElementById('ppBar'), pct = document.getElementById('ppPercent');
+                var steps = [].slice.call(ov.querySelectorAll('.pp-steps li'));
+                document.getElementById('ppAmount').textContent = (symbols[currency.value] || '') + amount.value + ' ' + currency.value;
+                ov.hidden = false;
+                var start = Date.now(), expected = 18;
+                (function tick() {
+                    var t = (Date.now() - start) / 1000;
+                    var p = Math.min(95, Math.round(95 * (1 - Math.exp(-t / (expected / 2.2)))));
+                    bar.style.width = p + '%'; pct.textContent = p + '%';
+                    steps.forEach(function (li, i) {
+                        var next = steps[i + 1];
+                        li.className = t >= +li.dataset.at ? (next && t >= +next.dataset.at ? 'done' : 'active') : '';
+                    });
+                    if (t > 30) document.getElementById('ppTip').textContent = 'The bank is taking longer than usual. Still working, please wait...';
+                    setTimeout(tick, 250);
+                })();
+            }
 
             // re-enable the button if the user comes back with the browser back button
             window.addEventListener('pageshow', function (e) {
