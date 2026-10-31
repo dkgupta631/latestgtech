@@ -26,24 +26,24 @@
     <title>Resend Callback</title>
     <style>
         :root {
-            --brand: #1e3d6e;
-            --brand-dark: #1e3d6e;
+            --brand: #00245a;
+            --brand-dark: #00245a;
             --text: #1f2d3d;
             --muted: #6b7a8c;
-            --line: #ebe8e1;
+            --line: #e3e6eb;
             --success: #1e9e5a; --success-bg: #e8f7ef;
             --pending: #b77400; --pending-bg: #fff5e0;
-            --processing: #2f86d6; --processing-bg: #e8eef8;
+            --processing: #00245a; --processing-bg: #e8eef8;
             --failed: #e53935; --failed-bg: #fdecec;
         }
         * { box-sizing: border-box; }
         body {
-            margin: 0; min-height: 100vh; background: #eef1f6;
+            margin: 0; min-height: 100vh; background: #f1f2f4;
             font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--text);
             display: flex; align-items: center; justify-content: center; padding: 32px 16px;
         }
-        .card { width: 100%; max-width: 460px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(30, 61, 110, .12); overflow: hidden; }
-        .card-top { height: 6px; background: linear-gradient(90deg, #1e3d6e 0%, #1e3d6e 70%, #d6a630 70%, #f1cf6b 100%); }
+        .card { width: 100%; max-width: 460px; background: #fff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 36, 90, .12); overflow: hidden; }
+        .card-top { height: 6px; background: linear-gradient(90deg, #00245a 0%, #00245a 70%, #e31e24 70%, #e31e24 100%); }
         .body { padding: 32px 28px 24px; text-align: center; }
         .icon {
             position: relative; width: 76px; height: 76px; margin: 0 auto 16px; border-radius: 50%;
@@ -68,7 +68,7 @@
         .s-pending { color: var(--pending); background: var(--pending-bg); }
         .s-processing { color: var(--processing); background: var(--processing-bg); }
         .s-failed { color: var(--failed); background: var(--failed-bg); }
-        .details { margin: 22px 0 0; padding: 4px 16px; background: #faf9f6; border: 1px solid var(--line); border-radius: 10px; text-align: left; }
+        .details { margin: 22px 0 0; padding: 4px 16px; background: #f7f8fa; border: 1px solid var(--line); border-radius: 10px; text-align: left; }
         .row { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; }
         .row:last-child { border-bottom: 0; }
         .row dt { color: var(--muted); flex-shrink: 0; }
@@ -80,13 +80,13 @@
         @keyframes shrink { from { transform: scaleX(1); } to { transform: scaleX(0); } }
         .btn {
             width: 100%; margin-top: 16px; height: 46px; border: 0; border-radius: 8px; cursor: pointer;
-            background: linear-gradient(135deg, #2a5296, #1e3d6e); color: #fff; font-size: 15px; font-weight: 800;
+            background: linear-gradient(135deg, #0a3a82, #00245a); color: #fff; font-size: 15px; font-weight: 800;
             display: inline-flex; align-items: center; justify-content: center; gap: 8px;
         }
         .btn:hover { filter: brightness(.96); }
         .btn:disabled { opacity: .7; cursor: wait; }
         .btn svg { width: 18px; height: 18px; stroke: #fff; }
-        .foot { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 14px; background: #faf9f6; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); }
+        .foot { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 14px; background: #f7f8fa; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); }
         .foot svg { width: 14px; height: 14px; stroke: var(--muted); }
         @media (prefers-reduced-motion: reduce) { .icon::after, .bar span { animation: none; } }
     </style>
@@ -94,6 +94,7 @@
 <body>
     <main class="card" id="card">
         <div class="card-top"></div>
+        <div style="text-align:center;padding:18px 20px 0"><img src="{{ URL::to('newassets/images/khbiz-logo.png') }}" alt="KHBiz" style="height:52px;width:auto"></div>
         <div class="body">
             <div class="icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>

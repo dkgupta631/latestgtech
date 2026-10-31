@@ -3,11 +3,7 @@
 
         <aside class="mm-auth-side">
             <div class="mm-auth-brand">
-                <img src="{{ URL::to('newassets/images/money-magnet-sm-logo.png') }}" alt="Money Magnet">
-                <div>
-                    <b>Money Magnet</b>
-                    <small>{{ __('messages.Payment Gateway') }}</small>
-                </div>
+                <img src="{{ URL::to('newassets/images/khbiz-logo.png') }}" alt="KHBiz">
             </div>
 
             <div>

@@ -24,7 +24,7 @@
             ];
             $manageRoute = ['Agent' => route('agent.list'), 'Merchant' => route('merchant.list')];
             $allTotal = $roleCounts->sum('total');
-            $palette = ['#c39226', '#1b1b1f', '#8a6410', '#5a5d66', '#a97c18', '#3a3a40'];
+            $palette = ['#00245a', '#e31e24', '#0a3a82', '#5a6b85', '#b3161b', '#2d5a9e'];
         @endphp
 
         {{-- KPI tiles (click to filter by role) --}}

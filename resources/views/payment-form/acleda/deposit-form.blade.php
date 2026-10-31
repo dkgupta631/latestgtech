@@ -12,12 +12,12 @@
     <title>Secure Checkout</title>
     <style>
         :root {
-            --brand: #1e3d6e;
-            --brand-dark: #1e3d6e;
+            --brand: #00245a;
+            --brand-dark: #00245a;
             --text: #1f2d3d;
             --muted: #6b7a8c;
-            --line: #ebe8e1;
-            --field: #faf9f6;
+            --line: #e3e6eb;
+            --field: #f7f8fa;
             --danger: #e53935;
             --danger-bg: #fdecec;
         }
@@ -25,7 +25,7 @@
         body {
             margin: 0;
             min-height: 100vh;
-            background: #eef1f6;
+            background: #f1f2f4;
             font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
             color: var(--text);
             display: flex;
@@ -38,10 +38,10 @@
             max-width: 460px;
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(30, 61, 110, .12);
+            box-shadow: 0 10px 30px rgba(0, 36, 90, .12);
             overflow: hidden;
         }
-        .card-top { height: 6px; background: linear-gradient(90deg, #1e3d6e 0%, #1e3d6e 70%, #d6a630 70%, #f1cf6b 100%); }
+        .card-top { height: 6px; background: linear-gradient(90deg, #00245a 0%, #00245a 70%, #e31e24 70%, #e31e24 100%); }
         .head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 22px 28px 0; }
         .head h1 { margin: 0; font-size: 20px; font-weight: 800; }
         .head p { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
@@ -66,7 +66,7 @@
             border: 1.5px solid var(--line); border-radius: 8px; background: #fff;
             font: inherit; font-size: 15px; color: var(--text); outline: none; transition: border-color .15s, box-shadow .15s;
         }
-        .input:focus { border-color: var(--brand-dark); box-shadow: 0 0 0 3px rgba(30, 61, 110, .15); }
+        .input:focus { border-color: var(--brand-dark); box-shadow: 0 0 0 3px rgba(0, 36, 90, .15); }
         .input[readonly] { background: var(--field); color: var(--muted); }
         .row2 { display: grid; grid-template-columns: 1fr 1.4fr; gap: 12px; }
         .methods { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -81,13 +81,13 @@
         .method .box small { display: block; font-size: 11px; color: var(--muted); }
         .method input:checked + .box { border-color: var(--brand-dark); background: #e8eef8; }
         .method input:checked + .box svg { stroke: var(--brand-dark); }
-        .method input:focus-visible + .box { box-shadow: 0 0 0 3px rgba(30, 61, 110, .25); }
+        .method input:focus-visible + .box { box-shadow: 0 0 0 3px rgba(0, 36, 90, .25); }
         .error { margin-top: 6px; font-size: 13px; color: var(--danger); }
         .alert { margin: 18px 28px 0; padding: 12px 14px; border-radius: 8px; background: var(--danger-bg); color: var(--danger); font-size: 14px; }
         .btn {
             display: flex; align-items: center; justify-content: center; gap: 8px;
             width: 100%; margin-top: 24px; height: 50px; border: 0; border-radius: 8px;
-            background: linear-gradient(135deg, #2a5296, #1e3d6e); color: #fff; font-size: 16px; font-weight: 800; cursor: pointer;
+            background: linear-gradient(135deg, #0a3a82, #00245a); color: #fff; font-size: 16px; font-weight: 800; cursor: pointer;
         }
         .btn:hover { filter: brightness(.96); }
         .btn:disabled { cursor: wait; opacity: .85; }
@@ -97,7 +97,7 @@
         .hint { margin: 10px 0 0; text-align: center; font-size: 12px; color: var(--muted); }
         .foot {
             display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap;
-            padding: 14px; background: #faf9f6; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); text-align: center;
+            padding: 14px; background: #f7f8fa; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line); text-align: center;
         }
         .foot svg { width: 14px; height: 14px; stroke: var(--muted); }
         @media (max-width: 420px) {
@@ -107,7 +107,7 @@
         }
         .pp-overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(238, 241, 246, .96); backdrop-filter: blur(4px); }
         .pp-overlay[hidden] { display: none; }
-        .pp-box { width: 100%; max-width: 420px; background: #fff; border-radius: 16px; padding: 30px 28px; text-align: center; box-shadow: 0 14px 40px rgba(30, 61, 110, .16); border-top: 6px solid var(--brand); }
+        .pp-box { width: 100%; max-width: 420px; background: #fff; border-radius: 16px; padding: 30px 28px; text-align: center; box-shadow: 0 14px 40px rgba(0, 36, 90, .16); border-top: 6px solid var(--brand); }
         .pp-ring { width: 84px; height: 84px; margin: 0 auto 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 6px solid #e8eef8; border-top-color: var(--brand); animation: pp-spin 1s linear infinite; }
         .pp-ring span { animation: pp-spin 1s linear infinite reverse; font-weight: 800; color: var(--brand); font-size: 17px; }
         @keyframes pp-spin { to { transform: rotate(360deg); } }
@@ -122,13 +122,14 @@
         .pp-steps li.done i { border-color: #1e9e5a; background: #1e9e5a; }
         .pp-steps li.done i::after { content: ""; position: absolute; left: 5px; top: 2px; width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
         .pp-bar { height: 6px; border-radius: 6px; background: #e8eef8; overflow: hidden; margin-bottom: 12px; }
-        .pp-bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #1e3d6e, #2a5296 80%, #d6a630); transition: width .25s linear; }
+        .pp-bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #00245a, #0a3a82 80%, #e31e24); transition: width .25s linear; }
         .pp-box small { color: var(--muted); font-size: 12.5px; }
     </style>
 </head>
 <body>
     <main class="card">
         <div class="card-top"></div>
+        <div style="text-align:center;padding:18px 20px 0"><img src="{{ URL::to('newassets/images/khbiz-logo.png') }}" alt="KHBiz" style="height:52px;width:auto"></div>
 
         <header class="head">
             <div>
