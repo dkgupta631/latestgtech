@@ -37,7 +37,7 @@
     <!-- Toster CSS END for Livewire and Laravel both-->
     <!-- Custom box css -->
     <link href="{{ URL::to('newassets/libs/custombox/custombox.min.css') }}" rel="stylesheet">
-        <link href="{{ URL::to('newassets/css/mm-theme.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ URL::to('newassets/css/mm-theme.css') }}?v={{ filemtime(public_path('newassets/css/mm-theme.css')) }}" rel="stylesheet" type="text/css" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -95,7 +95,7 @@
     <script>
         window.mmI18n = {!! json_encode($mmI18n, JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) !!};
     </script>
-    <script src="{{ URL::to('newassets/js/mm-alerts.js') }}"></script>
+    <script src="{{ URL::to('newassets/js/mm-alerts.js') }}?v={{ filemtime(public_path('newassets/js/mm-alerts.js')) }}"></script>
 
     <script>
         // mobile: tap outside the sidebar closes it
