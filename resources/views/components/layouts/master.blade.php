@@ -5,12 +5,12 @@
         <title>{{ $title ?? __('messages.PAYMENT GATEWAY') }}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta content="{{ __('messages.International Payment Gateway System') }}" name="description" />
-        <meta content="Coderthemes" name="author" />
+        <meta content="KHBiz" name="author" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- App favicon -->
-        <link rel="shortcut icon" href="{{ URL::to('newassets/images/favicon.ico') }}">
+        <link rel="shortcut icon" href="{{ URL::to('newassets/images/khbiz-icon.png') }}">
         <!-- App css -->
         <link href="{{ URL::to('newassets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" id="bootstrap-stylesheet" />
         <link href="{{ URL::to('newassets/css/icons.min.css') }}" rel="stylesheet" type="text/css" />

@@ -136,13 +136,8 @@
     <!-- LOGO -->
     <div class="logo-box">
         <a href="{{ route('dashboard') }}" class="logo logo-dark">
-            <span class="logo-lg">
-                <img src="{{ URL::to('newassets/images/money-magnet-sm-logo.png') }}" class="mm-brand-logo" alt="Money Magnet">
-                <span class="mm-brand-name">Money Magnet<small>{{ __('messages.Payment Gateway') }}</small></span>
-            </span>
-            <span class="logo-sm">
-                <img src="{{ URL::to('newassets/images/money-magnet-sm-logo.png') }}" class="mm-brand-logo" alt="Money Magnet">
-            </span>
+            <span class="logo-lg"><img src="{{ URL::to('newassets/images/khbiz-logo.png') }}" class="mm-brand-img" alt="KHBiz"></span>
+            <span class="logo-sm"><img src="{{ URL::to('newassets/images/khbiz-icon.png') }}" class="mm-brand-icon" alt="KHBiz"></span>
         </a>
     </div>
 

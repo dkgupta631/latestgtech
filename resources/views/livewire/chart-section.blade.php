@@ -17,7 +17,7 @@
                     fontFamily: 'Inter, Helvetica, Arial, sans-serif',
                     fontSize: 16,
                     fontWeight: 'bold',
-                    fontColor: '#1c1c1f',
+                    fontColor: '#12213a',
                     horizontalAlign: 'left',
                     margin: 16
                 },
@@ -47,13 +47,13 @@
                 },
                 toolTip: {
                     cornerRadius: 8,
-                    borderColor: '#c39226',
+                    borderColor: '#00245a',
                     fontFamily: 'Inter, Helvetica, Arial, sans-serif'
                 },
                 dataPointWidth: 28,
                 data: [{
                     type: 'column',
-                    color: '#c39226',
+                    color: '#00245a',
                     showInLegend: true,
                     legendText: '{{ __('messages.Deposit Amount') }}',
                     dataPoints: dataPoints

@@ -13,17 +13,17 @@
     <title>Redirecting to ACLEDA Bank</title>
     <style>
         :root {
-            --brand: #1e3d6e;
-            --brand-dark: #1e3d6e;
+            --brand: #00245a;
+            --brand-dark: #00245a;
             --text: #1f2d3d;
             --muted: #6b7a8c;
-            --line: #ebe8e1;
+            --line: #e3e6eb;
         }
         * { box-sizing: border-box; }
         body {
             margin: 0;
             min-height: 100vh;
-            background: #eef1f6;
+            background: #f1f2f4;
             font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
             color: var(--text);
             display: flex;
@@ -36,11 +36,11 @@
             max-width: 440px;
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(30, 61, 110, .12);
+            box-shadow: 0 10px 30px rgba(0, 36, 90, .12);
             overflow: hidden;
             text-align: center;
         }
-        .card-top { height: 6px; background: linear-gradient(90deg, #1e3d6e 0%, #1e3d6e 70%, #d6a630 70%, #f1cf6b 100%); }
+        .card-top { height: 6px; background: linear-gradient(90deg, #00245a 0%, #00245a 70%, #e31e24 70%, #e31e24 100%); }
         .body { padding: 36px 28px 24px; }
         .spinner {
             width: 64px; height: 64px; margin: 0 auto 20px;
@@ -52,7 +52,7 @@
         @keyframes spin { to { transform: rotate(360deg); } }
         h1 { margin: 0 0 6px; font-size: 21px; font-weight: 800; }
         .msg { margin: 0 auto; max-width: 320px; font-size: 14px; line-height: 1.5; color: var(--muted); }
-        .summary { margin: 24px 0 0; padding: 4px 18px; background: #faf9f6; border: 1px solid var(--line); border-radius: 10px; text-align: left; }
+        .summary { margin: 24px 0 0; padding: 4px 18px; background: #f7f8fa; border: 1px solid var(--line); border-radius: 10px; text-align: left; }
         .row { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
         .row:last-child { border-bottom: 0; }
         .row span:first-child { color: var(--muted); }
@@ -63,13 +63,13 @@
         .steps i { width: 24px; height: 2px; background: var(--line); display: inline-block; }
         .btn {
             display: none; width: 100%; margin-top: 20px; padding: 12px; border: 0; border-radius: 8px;
-            background: linear-gradient(135deg, #2a5296, #1e3d6e); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer;
+            background: linear-gradient(135deg, #0a3a82, #00245a); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer;
         }
         .btn:hover { filter: brightness(.96); }
         .note { margin: 14px 0 0; font-size: 12px; color: var(--muted); }
         .foot {
             display: flex; align-items: center; justify-content: center; gap: 6px;
-            padding: 14px; background: #faf9f6; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line);
+            padding: 14px; background: #f7f8fa; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line);
         }
         .foot svg { width: 14px; height: 14px; stroke: var(--muted); }
     </style>
@@ -77,6 +77,7 @@
 <body>
     <main class="card">
         <div class="card-top"></div>
+        <div style="text-align:center;padding:18px 20px 0"><img src="{{ URL::to('newassets/images/khbiz-logo.png') }}" alt="KHBiz" style="height:52px;width:auto"></div>
         <div class="body">
             <div class="spinner" aria-hidden="true"></div>
             <h1>Redirecting to ACLEDA Bank</h1>

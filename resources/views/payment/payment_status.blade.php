@@ -31,16 +31,16 @@
     <title>{{ $state['label'] }}</title>
     <style>
         :root {
-            --brand: #1e3d6e;
-            --brand-dark: #1e3d6e;
+            --brand: #00245a;
+            --brand-dark: #00245a;
             --text: #1f2d3d;
             --muted: #6b7a8c;
-            --line: #ebe8e1;
+            --line: #e3e6eb;
             --success: #1e9e5a;
             --success-bg: #e8f7ef;
             --pending: #e69500;
             --pending-bg: #fff5e0;
-            --processing: #2f86d6;
+            --processing: #00245a;
             --processing-bg: #e8eef8;
             --failed: #e53935;
             --failed-bg: #fdecec;
@@ -49,7 +49,7 @@
         body {
             margin: 0;
             min-height: 100vh;
-            background: #eef1f6;
+            background: #f1f2f4;
             font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
             color: var(--text);
             display: flex;
@@ -62,11 +62,11 @@
             max-width: 440px;
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(30, 61, 110, .12);
+            box-shadow: 0 10px 30px rgba(0, 36, 90, .12);
             overflow: hidden;
             text-align: center;
         }
-        .card-top { height: 6px; background: linear-gradient(90deg, #1e3d6e 0%, #1e3d6e 70%, #d6a630 70%, #f1cf6b 100%); }
+        .card-top { height: 6px; background: linear-gradient(90deg, #00245a 0%, #00245a 70%, #e31e24 70%, #e31e24 100%); }
         .body { padding: 34px 28px 26px; }
         .icon {
             width: 76px; height: 76px; margin: 0 auto 16px;
@@ -81,20 +81,20 @@
         .amount small { font-size: 15px; font-weight: 700; color: var(--muted); margin-left: 4px; }
         .txn { margin: 6px 0 0; font-size: 13px; color: var(--muted); word-break: break-all; }
         .txn b { color: var(--text); }
-        .redirect { margin: 24px 0 0; padding: 14px; background: #faf9f6; border: 1px solid var(--line); border-radius: 10px; font-size: 14px; color: var(--muted); }
+        .redirect { margin: 24px 0 0; padding: 14px; background: #f7f8fa; border: 1px solid var(--line); border-radius: 10px; font-size: 14px; color: var(--muted); }
         .redirect b { color: var(--brand-dark); }
         .bar { height: 4px; margin-top: 10px; border-radius: 4px; background: var(--line); overflow: hidden; }
         .bar span { display: block; height: 100%; width: 100%; background: var(--brand-dark); transform-origin: left; animation: shrink {{ $redirectSeconds }}s linear forwards; }
         @keyframes shrink { to { transform: scaleX(0); } }
         .btn {
             width: 100%; margin-top: 18px; padding: 12px; border: 0; border-radius: 8px;
-            background: linear-gradient(135deg, #2a5296, #1e3d6e); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer;
+            background: linear-gradient(135deg, #0a3a82, #00245a); color: #fff; font-size: 15px; font-weight: 700; cursor: pointer;
         }
         .btn:hover { filter: brightness(.96); }
         .btn:disabled { opacity: .7; cursor: wait; }
         .foot {
             display: flex; align-items: center; justify-content: center; gap: 6px;
-            padding: 14px; background: #faf9f6; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line);
+            padding: 14px; background: #f7f8fa; color: var(--muted); font-size: 12px; border-top: 1px solid var(--line);
         }
         .foot svg { width: 14px; height: 14px; stroke: var(--muted); }
         .state-success { --accent: var(--success); --accent-bg: var(--success-bg); }
@@ -106,6 +106,7 @@
 <body>
     <main class="card state-{{ $state['key'] }}">
         <div class="card-top"></div>
+        <div style="text-align:center;padding:18px 20px 0"><img src="{{ URL::to('newassets/images/khbiz-logo.png') }}" alt="KHBiz" style="height:52px;width:auto"></div>
         <div class="body">
             <div class="icon" aria-hidden="true">
                 @if ($state['key'] === 'success')
