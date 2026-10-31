@@ -1415,3 +1415,13 @@ input:checked + .slider { background: var(--mm-teal) !important; }
 input:checked + .slider { background: #00245a !important; }
 .mm-kpi-amber { background: #fde8e9 !important; color: #b3161b !important; }
 .mm-noti-menu .mm-noti-clear { color: #fff; }
+
+/* dashboard cards: numbers never break mid-value, they shrink to fit */
+.invoice-card .card-body > div:last-child { min-width: 0; flex: 1; }
+.invoice-card .invoice-num { word-break: normal !important; overflow-wrap: normal !important; white-space: nowrap; font-size: clamp(16px, 1.45vw, 26px); }
+@media (max-width: 767.98px) { .invoice-card .invoice-num { font-size: 22px; } }
+@media (min-width: 1200px) and (max-width: 1439.98px) {
+    .invoice-card .card-body { padding: 16px !important; gap: 10px; }
+    .invoice-card .icon { width: 44px; height: 44px; min-width: 44px; }
+    .invoice-card .invoice-num { font-size: 16px; }
+}

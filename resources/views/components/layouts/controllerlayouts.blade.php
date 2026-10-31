@@ -19,7 +19,7 @@
         <link href="{{ URL::to('newassets/libs/toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
          <!-- Toster CSS START Livewire-->
         <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
-        <link href="{{ URL::to('newassets/css/mm-theme.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ URL::to('newassets/css/mm-theme.css') }}?v={{ filemtime(public_path('newassets/css/mm-theme.css')) }}" rel="stylesheet" type="text/css" />
         <!-- Toster CSS END Livewire-->
          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </head>
