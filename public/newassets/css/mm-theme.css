@@ -1337,3 +1337,15 @@ input:checked + .slider { background: var(--mm-teal) !important; }
 
 /* dark modal/menu headers -> warm light headers */
 .mm-noti-head, .mm-modal-head, .mm-qrm-head { background: linear-gradient(90deg, #2a2b31, #3a3b42) !important; }
+
+/* gold buttons keep gold on hover / focus / press (no leftover green or blue) */
+.btn-primary:hover, .btn-success:hover, .btn-info:hover,
+.btn-primary:focus, .btn-success:focus, .btn-info:focus,
+.btn-primary:active, .btn-success:active, .btn-info:active,
+.btn-primary:not(:disabled):not(.disabled):active, .btn-success:not(:disabled):not(.disabled):active, .btn-info:not(:disabled):not(.disabled):active {
+    background: linear-gradient(135deg, #e9c25a 0%, #c39226 50%, #9c7415 100%) !important;
+    border-color: #a97c18 !important; color: var(--mm-on-gold) !important; filter: none !important;
+    box-shadow: 0 6px 16px rgba(195, 146, 38, .32) !important;
+}
+.btn-primary:disabled, .btn-success:disabled { background: var(--mm-gold-grad) !important; opacity: .6; box-shadow: none !important; }
+.btn-secondary:hover, .btn-secondary:focus { background: #e7e3da !important; border-color: #e7e3da !important; color: #1c1c1f !important; }

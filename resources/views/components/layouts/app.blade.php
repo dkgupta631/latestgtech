@@ -42,7 +42,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @livewireStyles
-    @vite(['resources/js/app.js'])
+    {{-- optional bundle for instant Pusher alerts; the site must work without a build --}}
+    @if (file_exists(public_path('build/manifest.json')))
+        @vite(['resources/js/app.js'])
+    @endif
 </head>
 
 <body>
